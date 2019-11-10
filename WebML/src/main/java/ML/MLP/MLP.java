@@ -124,7 +124,7 @@ public class MLP {
                         l.weight -= (learningRate / l.numAccDerivs) * l.accErrorDeriv;
 
                     double newLinkWeight = l.weight - (learningRate * regularizationRate) * regularizationDeriv;
-                    if (l.regularization == new Regularizations.L1() && // todo не робит
+                    if (l.regularization  instanceof Regularizations.L1 &&
                     l.weight * newLinkWeight < 0){
                         l.weight = 0;
                         l.isDead = true;

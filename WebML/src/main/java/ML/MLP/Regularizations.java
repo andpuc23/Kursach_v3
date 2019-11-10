@@ -1,6 +1,6 @@
 package ML.MLP;
 
-public class Regularizations {
+class Regularizations {
     static class L1 implements RegularizationFunction {
 
         public double output(double w) {
@@ -23,6 +23,4 @@ public class Regularizations {
             return w;
         }
     }
-
-    //todo написать сравнение класса
 }
