@@ -9,8 +9,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-
-
         <dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>tensorflow</artifactId>
@@ -22,6 +20,5 @@
             <artifactId>ejml-all</artifactId>
             <version>0.37.1</version>
         </dependency>
-
     </dependencies>
 </project>
