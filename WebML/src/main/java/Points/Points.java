@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// TODO add distortion
 public class Points extends ArrayList<Point>{
     List<Point> points;
 
@@ -54,6 +53,70 @@ public class Points extends ArrayList<Point>{
                 i--; //try again
         }
     }
+
+    /**
+     * creates a field of points, divided vertically and horizontally through center
+     * @param pointsNum number of generated points of each type
+     * @param size size of square field
+     * @param clear if points should be written to an empty list
+     */
+    void createXor(int pointsNum, int size, boolean clear){
+        if (clear)
+            points.clear();
+
+        Point center = new Point(0,0,0);
+        points.add(center);
+        for (int i = 0; i < 2*pointsNum; i++){
+            int x = ran.nextInt(size)*(ran.nextInt()%2==0?1:-1);
+            int y = ran.nextInt(size)*(ran.nextInt()%2==0?1:-1);
+            double val = (x*y > 0) ? 1:-1;
+            Point p = new Point(x, y, val);
+            points.add(p);
+        }
+    }
+
+    /**
+     * creates a circle ( 0;0 , circleRadius) of points w/ value 1,
+     * and ring of radius ringRadius of points w/ -1
+     * @param pointsNum number of points per value
+     * @param circleRadius size of inner circle
+     * @param ringRadius size of outer ring
+     * @param clear if points should be written to an empty list
+     */
+    void createCircle(int pointsNum, int circleRadius, int ringRadius, boolean clear){
+        if (clear)
+            points.clear();
+
+        Point center = new Point(0,0,0);
+        points.add(center);
+
+        for (int i = 0; i < pointsNum; i++){
+            int x = (int)(ran.nextDouble() *
+                    circleRadius *
+                    (ran.nextInt()%2==0?1:-1));
+
+            int y = (int)(ran.nextDouble() * circleRadius * (ran.nextInt()%2==0?1:-1));
+            Point p = new Point(x, y, 1);
+
+            if ((p.distanceTo(center)).compareTo((double)circleRadius) != 1)
+                points.add(p);
+            else
+                i--;
+        }
+        for (int i = 0; i < pointsNum; i++){
+            Point p = new Point((double) ringRadius, ran.nextDouble()*Math.PI*2, -1);
+            points.add(p);
+        }
+    }
+
+    void distortPoints(){
+        for (Point p : points){
+            p.setX(p.getCartesian()[0] +
+                    (int)(ran.nextDouble() * 20 * (ran.nextInt()%2==0?1:-1)));
+            p.setY(p.getCartesian()[1] +
+                    (int)(ran.nextDouble() * 20 * (ran.nextInt()%2==0?1:-1)));
+        }
+    }
 }
 
 class Point{
@@ -61,8 +124,8 @@ class Point{
     private int Y;
     double value;
 
-    double[] getCartesian(){
-        return new double[]{X, Y};
+    int[] getCartesian(){
+        return new int[]{X, Y};
     }
 
     double[] getPolar(){
@@ -90,6 +153,18 @@ class Point{
         X = (int) (ro * Math.sin(fi));
         Y = (int) (ro * Math.cos(fi));
         value = val;
+    }
+
+    void setX(int X){
+        this.X = X;
+    }
+
+    void setY(int Y){
+        this.Y = Y;
+    }
+
+    void setValue(double value){
+        this.value = value;
     }
 
     Double distanceTo(Point other){

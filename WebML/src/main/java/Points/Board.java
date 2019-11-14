@@ -26,7 +26,12 @@ public class Board extends JFrame {
 
 
     public static void main(String[] args) {
-        System.out.println("Enter 1 to draw two clusters or 2 to draw spirals; 0 to exit");
+        System.out.println("Enter:\n" +
+                "1 to draw two clusters\n" +
+                "2 to draw spirals\n" +
+                "3 to draw xor-thing\n" +
+                "4 to draw circle and ring\n" +
+                "0 to exit");
         int choise = 0;
         do {
             java.io.BufferedReader in = new java.io.BufferedReader(
@@ -37,12 +42,28 @@ public class Board extends JFrame {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (choise == 1) {
-                System.out.println("Drawing clusters");
-                new Board("clusters");
-            } else if (choise == 2) {
-                System.out.println("Drawing spirals");
-                new Board("spirals");
+            switch (choise) {
+                case 1:
+                    System.out.println("Drawing clusters");
+                    new Board("clusters");
+                    break;
+
+                case 2:
+                    System.out.println("Drawing spirals");
+                    new Board("spirals");
+                    break;
+
+                case 3:
+                    System.out.println("Drawing XOR");
+                    new Board("xor");
+                    break;
+
+                case 4:
+                    System.out.println("Drawing circle");
+                    new Board("circle");
+                    break;
+                default:
+                    break;
             }
         } while (choise != 0);
     }
@@ -59,8 +80,19 @@ class MyPanel extends JPanel {
             list.createCluster(0,0, 1, 200, 500, true);
             list.createCluster(0,150, -1, 150, 450, false);
         }
-        else
+        else if (param.equals("spirals"))
             list.createSpirals(0.025, 500);
+
+        else if (param.equals("xor"))
+            list.createXor(1000, 500, true);
+
+        else if (param.equals("circle"))
+            list.createCircle(1000, 150, 300, true);
+
+        else
+            System.out.println("unknown parameter");
+        list.distortPoints();
+
     }
 
     @Override
@@ -73,10 +105,14 @@ class MyPanel extends JPanel {
     void paintPoints(Graphics2D g2){
         g2.setColor(Color.WHITE);
         g2.drawOval(500,400,5,5);
+        g2.fillOval(500,400,5,5);
         for (Point p : list.points){
             g2.setColor(p.value > 0 ? Color.BLUE : Color.RED);
-            g2.drawOval((int)(p.getCartesian()[0])+500,
-                    (int)(p.getCartesian()[1]) + 400, 5,5);
+            g2.drawOval(p.getCartesian()[0]+500,
+                    p.getCartesian()[1] + 400, 5,5);
+            g2.fillOval(p.getCartesian()[0]+500,
+                    p.getCartesian()[1] + 400, 5,5);
+
         }
     }
 }
