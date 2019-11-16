@@ -1,4 +1,4 @@
-package ML.MLP;
+package ML.Functions;
 
 public interface ActivationFunction {
     double output(double x);

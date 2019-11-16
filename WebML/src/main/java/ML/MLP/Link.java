@@ -1,10 +1,12 @@
 package ML.MLP;
 
-class Link {
+import ML.Functions.RegularizationFunction;
+
+public class Link {
     String id;
     Neuron source;
     Neuron destination;
-    double weight;
+    public double weight;
 
     //error derivative with respect to its weight
     double errorDeriv;
@@ -19,13 +21,20 @@ class Link {
 
     RegularizationFunction regularization;
 
-    Link(Neuron source, Neuron dest, RegularizationFunction reg, boolean initZero){
+    /**
+     *
+     * @param source link start
+     * @param dest link finish
+     * @param reg regularization function - L1 of L2
+     * @param initZero if link weight is 0
+     */
+    public Link(Neuron source, Neuron dest, RegularizationFunction reg, boolean initZero){
         id = source.id + " to " + dest.id;
         this.source = source;
         this.destination = dest;
         this.regularization = reg;
         this.isDead = false;
         if (initZero)
-            this.weight = 0;
+            this.weight = 0d;
     }
 }

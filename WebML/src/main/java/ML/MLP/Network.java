@@ -1,13 +1,23 @@
 package ML.MLP;
 
-public class MLP {
+import ML.Functions.*;
+
+public class Network {
     Neuron[][] network;
 
-    //TODO добавить прокидывание ссылок не все ко всем, а выборочно
-    public MLP(int[] networkShape, ActivationFunction activation,
-                             ActivationFunction outputActivation,
-                             RegularizationFunction regularization, String[] inputIds,
-                             boolean initZero){
+    /**
+     * create multilayer perceptron
+     * @param networkShape each value is num of neurons in layer
+     * @param activation neuron's function: linear/relu/tanh/sigmoid
+     * @param outputActivation last layer neuron's function
+     * @param regularization regularization function of network
+     * @param inputIds id's of 1st layer neurons
+     * @param initZero initialize neuron's bias with 0d
+     */
+    public Network(int[] networkShape, ActivationFunction activation,
+                   ActivationFunction outputActivation,
+                   RegularizationFunction regularization, String[] inputIds,
+                   boolean initZero){
         int numLayers = networkShape.length;
         int id = 1;
         network = new Neuron[numLayers][];
@@ -42,6 +52,7 @@ public class MLP {
             }
         }
     }
+
 
 
     double forwardPropagation(double[] inputs){
@@ -101,6 +112,7 @@ public class MLP {
         }
     }
 
+
     void updateWeights(double learningRate, double regularizationRate){
         for (int layerId = 1; layerId < network.length; layerId++){
             for (int i = 0; i < network[layerId].length; i++){
@@ -113,26 +125,26 @@ public class MLP {
                 }
 
                 for (int j = 0; j < node.inputLinks.size(); j++){
-                    Link l = node.inputLinks.get(j);
-                    if (l.isDead)
+                    Link link = node.inputLinks.get(j);
+                    if (link.isDead)
                         continue;
 
-                    double regularizationDeriv = l.regularization == null ? 0 :
-                            l.regularization.der(l.weight);
+                    double regularizationDeriv = link.regularization == null ? 0 :
+                            link.regularization.der(link.weight);
 
-                    if (l.numAccDerivs > 0) //update weight
-                        l.weight -= (learningRate / l.numAccDerivs) * l.accErrorDeriv;
+                    if (link.numAccDerivs > 0) //update weight
+                        link.weight -= (learningRate / link.numAccDerivs) * link.accErrorDeriv;
 
-                    double newLinkWeight = l.weight - (learningRate * regularizationRate) * regularizationDeriv;
-                    if (l.regularization  instanceof Regularizations.L1 &&
-                    l.weight * newLinkWeight < 0){
-                        l.weight = 0;
-                        l.isDead = true;
+                    double newLinkWeight = link.weight - (learningRate * regularizationRate) * regularizationDeriv;
+                    if (link.regularization instanceof Regularizations.L1 &&
+                    link.weight * newLinkWeight < 0){
+                        link.weight = 0;
+                        link.isDead = true;
                     } else {
-                        l.weight = newLinkWeight;
+                        link.weight = newLinkWeight;
                     }
-                    l.accErrorDeriv = 0d;
-                    l.numAccDerivs = 0;
+                    link.accErrorDeriv = 0d;
+                    link.numAccDerivs = 0;
                 }
             }
         }

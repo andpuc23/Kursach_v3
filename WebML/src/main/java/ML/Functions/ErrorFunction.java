@@ -1,4 +1,4 @@
-package ML.MLP;
+package ML.Functions;
 
 public interface ErrorFunction {
     double error(double output, double target);

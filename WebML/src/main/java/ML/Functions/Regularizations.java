@@ -1,7 +1,7 @@
-package ML.MLP;
+package ML.Functions;
 
-class Regularizations {
-    static class L1 implements RegularizationFunction {
+public class Regularizations {
+    public static class L1 implements RegularizationFunction {
 
         public double output(double w) {
             return Math.abs(w);
@@ -13,7 +13,7 @@ class Regularizations {
     }
 
 
-    static class L2 implements RegularizationFunction {
+    public static class L2 implements RegularizationFunction {
 
         public double output(double w) {
             return 0.5 * w * w;

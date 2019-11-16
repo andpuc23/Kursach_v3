@@ -1,5 +1,7 @@
 package ML.MLP;
 
+import ML.Functions.ActivationFunction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +33,8 @@ public class Neuron {
 
     public Neuron (String id, ActivationFunction activation,
                    boolean initZero){
-        inputLinks = new ArrayList<Link>();
-        outputLinks = new ArrayList<Link>();
+        inputLinks = new ArrayList<>();
+        outputLinks = new ArrayList<>();
         this.id = id;
         this.activation = activation;
         if (initZero)

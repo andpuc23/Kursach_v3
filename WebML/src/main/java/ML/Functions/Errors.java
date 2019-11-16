@@ -1,8 +1,7 @@
-package ML.MLP;
+package ML.Functions;
 
 public class Errors {
-    static class Square implements ErrorFunction{
-
+    public static class Square implements ErrorFunction {
         public double error(double output, double target) {
             return 0.5*Math.pow(output-target, 2);
         }

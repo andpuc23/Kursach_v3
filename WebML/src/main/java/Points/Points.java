@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Points extends ArrayList<Point>{
+public class Points{
     List<Point> points;
+    public List<Point> training;
+    public List<Point> test;
 
-    Points(){
+    public Points(){
         points = new ArrayList<Point>();
+        training = new ArrayList<Point>();
+        test = new ArrayList<Point>();
     }
+
     private static Random ran = new Random();
     /**
      * creates two spirals starting at (0;0)
      * @param k coef-t in ro = k*phi
      * @param pointsNum number of points in single spiral
      */
-    void createSpirals(double k, int pointsNum){
+    public void createSpirals(double k, int pointsNum){
         points.clear();
         for (int i = 0; i < pointsNum; i++){
             double ro = i*0.75d;
@@ -36,13 +41,13 @@ public class Points extends ArrayList<Point>{
      * @param size linear size of cluster
      * @param pointsNum number of points in cluster
      */
-    void createCluster(int cX, int cY, int value, int size, int pointsNum, boolean clear){
+    public void createCluster(int cX, int cY, int value, int size, int pointsNum, boolean clear){
         if (clear)
             points.clear();
         Point center = new Point(cX, cY, 0);
         for (int i = 0; i < pointsNum; i++){
             int x = cX + (int)(ran.nextDouble()* //coefficient
-                    size* // max size
+                    size * // max size
                     (ran.nextInt()%2==0?1:-1)); //+ or -1
 
             int y = cY + (int)(ran.nextDouble() * size * (ran.nextInt()%2==0?1:-1));
@@ -60,7 +65,7 @@ public class Points extends ArrayList<Point>{
      * @param size size of square field
      * @param clear if points should be written to an empty list
      */
-    void createXor(int pointsNum, int size, boolean clear){
+    public void createXor(int pointsNum, int size, boolean clear){
         if (clear)
             points.clear();
 
@@ -69,7 +74,7 @@ public class Points extends ArrayList<Point>{
         for (int i = 0; i < 2*pointsNum; i++){
             int x = ran.nextInt(size)*(ran.nextInt()%2==0?1:-1);
             int y = ran.nextInt(size)*(ran.nextInt()%2==0?1:-1);
-            double val = (x*y > 0) ? 1:-1;
+            int val = (x*y > 0) ? 1:-1;
             Point p = new Point(x, y, val);
             points.add(p);
         }
@@ -83,7 +88,7 @@ public class Points extends ArrayList<Point>{
      * @param ringRadius size of outer ring
      * @param clear if points should be written to an empty list
      */
-    void createCircle(int pointsNum, int circleRadius, int ringRadius, boolean clear){
+    public void createCircle(int pointsNum, int circleRadius, int ringRadius, boolean clear){
         if (clear)
             points.clear();
 
@@ -109,7 +114,7 @@ public class Points extends ArrayList<Point>{
         }
     }
 
-    void distortPoints(){
+    public void distortPoints(){
         for (Point p : points){
             p.setX(p.getCartesian()[0] +
                     (int)(ran.nextDouble() * 20 * (ran.nextInt()%2==0?1:-1)));
@@ -117,58 +122,19 @@ public class Points extends ArrayList<Point>{
                     (int)(ran.nextDouble() * 20 * (ran.nextInt()%2==0?1:-1)));
         }
     }
-}
-
-class Point{
-    private int X;
-    private int Y;
-    double value;
-
-    int[] getCartesian(){
-        return new int[]{X, Y};
-    }
-
-    double[] getPolar(){
-        double ro = X*X + Y*Y;
-        double phi = Math.atan2(Y, X);
-        return new double[]{Math.sqrt(ro), phi};
-    }
 
     /**
-      * accepts cartesian coordinates as params
+     * splits points into training & test sets
+     * @param ratio of test points to all
      */
-    Point(int x, int y, double val){
-        X = x;
-        Y = y;
-        value = val;
-    }
-
-    /**
-     * accepts polar coordinates of points
-     * @param ro distance to the zero of axis
-     * @param fi angle
-     * @param val value of point
-     */
-    Point(double ro, double fi, double val){
-        X = (int) (ro * Math.sin(fi));
-        Y = (int) (ro * Math.cos(fi));
-        value = val;
-    }
-
-    void setX(int X){
-        this.X = X;
-    }
-
-    void setY(int Y){
-        this.Y = Y;
-    }
-
-    void setValue(double value){
-        this.value = value;
-    }
-
-    Double distanceTo(Point other){
-        return Math.sqrt((this.X - other.X) * (this.X - other.X) +
-                (this.Y - other.Y) * (this.Y - other.Y));
+    public void splitPoints(double ratio){
+        int toTest = (int)(ratio*10);
+        for (int i = 0; i < points.size(); i++){
+            if (i%10 < toTest)
+                test.add(points.get(i));
+            else
+                training.add(points.get(i));
+        }
     }
 }
+

@@ -1,7 +1,7 @@
-package ML.MLP;
+package ML.Functions;
 
 public class Activations {
-    static class Linear implements ActivationFunction {
+    public static class Linear implements ActivationFunction {
         public double output(double x) {
             return x;
         }
@@ -11,7 +11,7 @@ public class Activations {
         }
     }
 
-    static class Relu implements ActivationFunction {
+    public static class Relu implements ActivationFunction {
 
         public double output(double x) {
             return Math.max(0, x);
@@ -22,7 +22,7 @@ public class Activations {
         }
     }
 
-    static class Sigmoid implements ActivationFunction {
+    public static class Sigmoid implements ActivationFunction {
         public double output(double x) {
             return 1 / (1 + Math.exp(x));
         }
@@ -32,7 +32,7 @@ public class Activations {
         }
     }
 
-    static class Tanh implements ActivationFunction {
+    public static class Tanh implements ActivationFunction {
 
         public double output(double x) {
             return Math.tanh(x);
