@@ -2,12 +2,12 @@ package ML.RBF;
 
 class Link {
     String id;
-    Neuron source;
-    Neuron dest;
+    HiddenNeuron source;
+    OutputNeuron dest;
     public double weight;
 
 
-    Link(Neuron source, Neuron dest){
+    Link(HiddenNeuron source, OutputNeuron dest){
         id = source.id + " to " + dest.id;
         this.source = source;
         this.dest = dest;

@@ -2,38 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0f194963-ec8e-4c39-9312-8f291fec589c" name="Default Changelist" comment="Added RBF &amp; console app to check">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ML/Application/ConsoleApp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ML/RBF/Link.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ML/RBF/Network.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ML/RBF/Neuron.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Points/Point.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ML/RBF/HiddenNeuron.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Points/CirclePoints.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Points/ClusterPoints.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Points/PointsGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Points/SpiralsPoints.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Points/XorPoints.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/ActivationFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/Functions/ActivationFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/Activations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/Functions/Activations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/ErrorFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/Functions/ErrorFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/Errors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/Functions/Errors.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/Link.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/MLP/Link.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/MLP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/MLP/Network.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/Neuron.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/MLP/Neuron.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/RegularizationFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/Functions/RegularizationFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/Regularizations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/Functions/Regularizations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ML/Application/ConsoleApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application/ConsoleApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ML/MLP/Network.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/MLP/Network.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ML/RBF/Link.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/RBF/Link.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ML/RBF/Network.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ML/RBF/Network.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ML/RBF/Neuron.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Points/Board.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Points/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Points/Point.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Points/Points.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Points/Points.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/ActivationFunction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Activations$Linear.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Activations$Relu.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Activations$Sigmoid.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Activations$Tanh.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Activations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/ErrorFunction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Errors$Square.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Errors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Link.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ML/MLP/Link.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/MLP.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Neuron.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ML/MLP/Neuron.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/RegularizationFunction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Regularizations$L1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Regularizations$L2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ML/MLP/Regularizations.class" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -47,7 +30,7 @@
     <session id="-778953685">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="15" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.16" value="1" />
@@ -59,26 +42,27 @@
           <entry key="project.open.time.23" value="1" />
           <entry key="project.open.time.24" value="1" />
           <entry key="project.open.time.26" value="1" />
+          <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.29" value="1" />
           <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.31" value="2" />
           <entry key="project.open.time.37" value="1" />
           <entry key="project.open.time.39" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="18" />
+          <entry key="project.opened" value="19" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="7" />
-          <entry key="java" value="16732" />
+          <entry key="java" value="21740" />
           <entry key="txt" value="156" />
           <entry key="xml" value="36" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="16732" />
+          <entry key="JAVA" value="21740" />
           <entry key="PLAIN_TEXT" value="163" />
           <entry key="XML" value="36" />
         </counts>
@@ -86,14 +70,14 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="1" />
-          <entry key="java" value="72" />
+          <entry key="java" value="105" />
           <entry key="xml" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="1" />
-          <entry key="JAVA" value="72" />
+          <entry key="JAVA" value="105" />
           <entry key="XML" value="4" />
         </counts>
       </usages-collector>
@@ -102,35 +86,22 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Points/Points.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Link.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="221">
+              <caret line="13" column="25" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Points/Point.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/HiddenNeuron.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Neuron.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="52" column="88" selection-start-line="52" selection-start-column="88" selection-end-line="52" selection-end-column="88" />
+            <state relative-caret-position="327">
+              <caret line="34" column="91" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1212#1213#0" expanded="true" />
-                <element signature="e#1303#1304#0" expanded="true" />
+                <element signature="e#724#725#0" expanded="true" />
+                <element signature="e#823#824#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -139,38 +110,25 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Network.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="29" column="47" selection-start-line="29" selection-start-column="47" selection-end-line="29" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ML/Application/ConsoleApp.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
+            <state relative-caret-position="-13">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1167#1168#0" expanded="true" />
+                <element signature="e#1209#1210#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Link.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="14" lean-forward="true" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ML/MLP/Link.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Application/ConsoleApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="61" lean-forward="true" selection-start-line="16" selection-start-column="61" selection-end-line="16" selection-end-column="61" />
+            <state relative-caret-position="187">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -219,16 +177,25 @@
         <option value="$PROJECT_DIR$/src/main/java/Points/Board.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/Functions/Regularizations.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/Functions/Errors.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ML/MLP/Network.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/MLP/Link.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/Functions/Activations.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Points/Point.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/MLP/Neuron.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Points/Points.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ML/MLP/Network.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/Application/ConsoleApp.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/RBF/Neuron.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ML/RBF/Network.java" />
         <option value="$PROJECT_DIR$/src/main/java/ML/RBF/Link.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ML/RBF/OutputNeuron.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/Point.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/Points.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/newPoints.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/PointsGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/CirclePoints.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/Spirals.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/XorPoints.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Points/Cluster.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ML/RBF/Network.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ML/RBF/HiddenNeuron.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Application/ConsoleApp.java" />
       </list>
     </option>
   </component>
@@ -246,7 +213,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1590" />
+    <option name="x" value="-12" />
+    <option name="y" value="-12" />
     <option name="width" value="1622" />
     <option name="height" value="1732" />
   </component>
@@ -287,15 +255,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ML" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebML_first" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebML" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ML" type="462c0819:PsiDirectoryNode" />
               <item name="Application" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -305,25 +264,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="ML" type="462c0819:PsiDirectoryNode" />
-              <item name="Functions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebML_first" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebML" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ML" type="462c0819:PsiDirectoryNode" />
-              <item name="MLP" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebML_first" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebML" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ML" type="462c0819:PsiDirectoryNode" />
-              <item name="RBF" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="WebML_first" type="b2602c69:ProjectViewProjectNode" />
@@ -332,15 +272,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="Points" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebML_first" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebML" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="Points" type="462c0819:PsiDirectoryNode" />
-              <item name="Board.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="WebML_first" type="b2602c69:ProjectViewProjectNode" />
@@ -353,20 +284,21 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1573929516707" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1574160711900" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../грудина/sweater1" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
   <component name="RecentsManager">
@@ -386,26 +318,13 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ConsoleApp">
-    <configuration name="Board" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Points.Board" />
-      <module name="WebML" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Points.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="ConsoleApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ML.Application.ConsoleApp" />
+      <option name="MAIN_CLASS_NAME" value="Application.ConsoleApp" />
       <module name="WebML" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ML.Application.*" />
+          <option name="PATTERN" value="Application.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -413,59 +332,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Link" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ML.MLP.Link" />
-      <module name="WebML" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ML.Functions.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Network" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ML.MLP.Network" />
-      <module name="WebML" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ML.Functions.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Regularizations" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ML.Functions.Regularizations" />
-      <module name="WebML" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ML.Functions.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-      <item itemvalue="Application.Network" />
-      <item itemvalue="Application.Link" />
-      <item itemvalue="Application.Regularizations" />
-      <item itemvalue="Application.Board" />
-      <item itemvalue="Application.ConsoleApp" />
-    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.ConsoleApp" />
-        <item itemvalue="Application.Board" />
-        <item itemvalue="Application.Regularizations" />
-        <item itemvalue="Application.Link" />
-        <item itemvalue="Application.Network" />
       </list>
     </recent_temporary>
   </component>
@@ -496,7 +365,8 @@
       <workItem from="1573888100890" duration="4359000" />
       <workItem from="1573895353879" duration="2637000" />
       <workItem from="1573900706892" duration="1550000" />
-      <workItem from="1573924047867" duration="5452000" />
+      <workItem from="1573924047867" duration="16642000" />
+      <workItem from="1574143472663" duration="12065000" />
     </task>
     <task id="LOCAL-00001" summary="fixed comparison of RegularizationFunction's">
       <created>1573429374292</created>
@@ -512,11 +382,18 @@
       <option name="project" value="LOCAL" />
       <updated>1573576250610</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added RBF &amp; console app to check">
+      <created>1573929552638</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1573929552638</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48048000" />
+    <option name="totallyTimeSpent" value="71303000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -531,7 +408,7 @@
     <frame x="-6" y="-6" width="1613" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19935691" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17877814" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -540,7 +417,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32823366" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2892907" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991655" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -549,7 +426,8 @@
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32823366" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32962447" />
-      <window_info active="true" anchor="bottom" id="Messages" order="11" visible="true" weight="0.32684284" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32684284" />
+      <window_info anchor="bottom" id="Inspection Results" order="12" weight="0.32962447" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -605,6 +483,22 @@
     <MESSAGE value="Added RBF &amp; console app to check" />
     <option name="LAST_COMMIT_MESSAGE" value="Added RBF &amp; console app to check" />
   </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="d" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>d</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/org/ejml/ejml-simple/0.37.1/ejml-simple-0.37.1.jar!/org/ejml/simple/SimpleBase.class">
       <provider selected="true" editor-type-id="text-editor">
@@ -642,31 +536,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Points/Board.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1479">
-          <caret line="89" column="43" selection-start-line="89" selection-start-column="43" selection-end-line="89" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ML/Functions/ErrorFunction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ML/Functions/RegularizationFunction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ML/Functions/Regularizations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="15" column="11" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -691,77 +564,178 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://D:/Java/src.zip!/java/lang/Math.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="270" column="25" selection-start-line="270" selection-start-column="25" selection-end-line="270" selection-end-column="25" />
+          <folding>
+            <element signature="e#10333#10334#0" expanded="true" />
+            <element signature="e#10414#10415#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ML/MLP/Network.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="25" column="47" lean-forward="true" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ML/MLP/Neuron.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Points/Points.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Points/Point.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ML/Application/ConsoleApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Neuron.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="52" column="88" selection-start-line="52" selection-start-column="88" selection-end-line="52" selection-end-column="88" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1212#1213#0" expanded="true" />
-            <element signature="e#1303#1304#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Network.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="29" column="47" selection-start-line="29" selection-start-column="47" selection-end-line="29" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Link.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="14" lean-forward="true" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        <state relative-caret-position="272">
+          <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ML/MLP/Link.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
-          <caret line="16" column="61" lean-forward="true" selection-start-line="16" selection-start-column="61" selection-end-line="16" selection-end-column="61" />
+          <caret line="16" column="61" selection-start-line="16" selection-start-column="61" selection-end-line="16" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/OutputNeuron.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#358#359#0" expanded="true" />
+            <element signature="e#400#401#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ML/MLP/Neuron.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="901">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/src.zip!/java/text/DecimalFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="432" column="32" selection-start-line="432" selection-start-column="32" selection-end-line="432" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/src.zip!/java/util/Collections.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="491">
+          <caret line="420" column="23" selection-start-line="420" selection-start-column="23" selection-end-line="420" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ML/Functions/RegularizationFunction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ML/Functions/Regularizations.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="15" column="11" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/Point.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/Points.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="156" selection-start-line="156" selection-end-line="156" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/Points.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/PointsGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/CirclePoints.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="20" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/SpiralsPoints.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/XorPoints.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/ClusterPoints.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Link.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="25" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Points/Board.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="76" column="15" selection-start-line="76" selection-start-column="15" selection-end-line="76" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/HiddenNeuron.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="34" column="91" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
+          <folding>
+            <element signature="e#724#725#0" expanded="true" />
+            <element signature="e#823#824#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ML/RBF/Network.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-13">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1167#1168#0" expanded="true" />
+            <element signature="e#1209#1210#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Application/ConsoleApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

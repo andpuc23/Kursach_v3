@@ -6,7 +6,12 @@ public class Point{
     public int value;
 
     public int[] getCartesian(){
-        return new int[]{X, Y};
+        int[] res = new int[2];
+        res[0] = X;
+        res[1] = Y;
+        return res;
+
+//        return new int[]{X, Y};
     }
 
     double[] getPolar(){

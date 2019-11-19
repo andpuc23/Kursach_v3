@@ -54,8 +54,7 @@ public class Network {
     }
 
 
-
-    double forwardPropagation(double[] inputs){
+    public double forwardPropagation(double[] inputs){
         if (inputs.length != network[0].length)
             throw new IllegalArgumentException("inputs number and input " +
                     "layer size do not correspond");
@@ -73,7 +72,7 @@ public class Network {
         return network[network.length - 1][0].output;
     }
 
-    void backPropagation(double target, ErrorFunction errorFunc) {
+    public void backPropagation(double target, ErrorFunction errorFunc) {
         Neuron outputNode = network[network.length-1][0];
         outputNode.outputDeriv = errorFunc.der(outputNode.output, target);
 
@@ -113,7 +112,7 @@ public class Network {
     }
 
 
-    void updateWeights(double learningRate, double regularizationRate){
+    public void updateWeights(double learningRate, double regularizationRate){
         for (int layerId = 1; layerId < network.length; layerId++){
             for (int i = 0; i < network[layerId].length; i++){
                 Neuron node = network[layerId][i];
