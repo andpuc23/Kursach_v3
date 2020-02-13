@@ -1,10 +1,11 @@
 package ML.RBF;
 
+import ML.INetwork;
 import Points.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Network {
+public class Network implements INetwork {
     private int currId;
 
     double neuronSigma;
@@ -25,17 +26,21 @@ public class Network {
                 point.getCartesian());
 
         hiddenLayer.add(hn);
-        Link link = new Link(hn, output);
-        link.weight = 0d;
+        hn.weight = 0d;
         double err = point.value - this.outputForPoint(point);
 
         //adjust link's weight
-        link.weight = err;
-        output.inputs.add(link);
+        hn.weight = err;
     }
 
-    double outputForPoint(Point p){
-        return output.outputFor(p);
+    public double outputForPoint(Point p){
+        double sum = 0d;
+
+        for (HiddenNeuron hn : hiddenLayer){
+            sum += hn.error(p) * hn.weight;
+        }
+        return sum;
+//        return output.outputFor(p);
     }
 
     public boolean test(Point testCase){
@@ -47,7 +52,7 @@ public class Network {
         StringBuilder sb = new StringBuilder();
         sb.append("RBF NN, " + hiddenLayer.size() + "\n");
 
-        sb.append("last neuron: " + hiddenLayer.get(hiddenLayer.size()-1).toString() + "; ");
+//        sb.append("last neuron: " + hiddenLayer.get(hiddenLayer.size()-1).toString() + "; ");
 
         sb.append("weight: " + output.inputs.get(output.inputs.size()-1).weight);
 

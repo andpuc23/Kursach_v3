@@ -2,6 +2,8 @@ package ML.MLP;
 
 import ML.Functions.RegularizationFunction;
 
+import java.util.Random;
+
 public class Link {
     String id;
     Neuron source;
@@ -36,5 +38,13 @@ public class Link {
         this.isDead = false;
         if (initZero)
             this.weight = 0d;
+        else
+            this.weight = new Random(System.currentTimeMillis()).nextDouble();
+    }
+
+    @Override
+    public String toString() {
+        return "Link " + id +
+                "\nweight: " + weight + "\n\n";
     }
 }

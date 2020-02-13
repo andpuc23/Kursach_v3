@@ -53,4 +53,11 @@ public class Neuron {
         output = activation.output(totalInput);
         return output;
     }
+
+    @Override
+    public String toString(){
+        return "Neuron" + id +
+                "\nTotal input: " + totalInput +
+                "\nbias: " + bias + "\n\n";
+    }
 }

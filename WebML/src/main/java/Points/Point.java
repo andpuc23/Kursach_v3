@@ -1,5 +1,7 @@
 package Points;
 
+import java.util.Arrays;
+
 public class Point{
     private int X;
     private int Y;
@@ -23,7 +25,7 @@ public class Point{
     /**
       * accepts cartesian coordinates as params
      */
-    Point(int x, int y, int val){
+    public Point(int x, int y, int val){
         X = x;
         Y = y;
         value = val;
@@ -56,5 +58,10 @@ public class Point{
     Double distanceTo(Point other){
         return Math.sqrt((this.X - other.X) * (this.X - other.X) +
                 (this.Y - other.Y) * (this.Y - other.Y));
+    }
+
+    @Override
+    public String toString(){
+        return Arrays.toString(this.getCartesian()) + "; " + value;
     }
 }

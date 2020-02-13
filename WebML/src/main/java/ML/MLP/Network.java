@@ -1,9 +1,26 @@
 package ML.MLP;
 
 import ML.Functions.*;
+import ML.INetwork;
+import Points.Point;
 
-public class Network {
+import java.util.Arrays;
+import java.util.Collections;
+
+
+public class Network implements INetwork {
     Neuron[][] network;
+
+    public void structure() {
+        for (int i = 0; i < network.length; i++) {
+            for (int j = 0; j < network[i].length; j++) {
+                for (Link l : network[i][j].outputLinks
+                ) {
+                    System.out.println(l.toString());
+                }
+            }
+        }
+    }
 
     /**
      * create multilayer perceptron
@@ -30,14 +47,18 @@ public class Network {
 
             for (int i = 0; i < numNeurons; i++){
                 String neuronId = Integer.toString(id);
-
-                if (isInputLayer)
+                Neuron neuron;
+                if (isInputLayer){
                     neuronId = inputIds[i];
-                else
+                    neuron = new Neuron(neuronId, isOutputLayer ? outputActivation : activation,
+                            initZero);
+                }
+                else{
                     id++;
-
-                Neuron neuron = new Neuron(neuronId, isOutputLayer ? outputActivation : activation,
+                    neuron = new InputNeuron(neuronId, isOutputLayer ? outputActivation : activation,
                         initZero);
+                }
+
                 network[layerId][i] = neuron;
 
                 // adding links from previous layers
@@ -54,7 +75,7 @@ public class Network {
     }
 
 
-    public double forwardPropagation(double[] inputs){
+    public double forwardPropagation(int[] inputs){
         if (inputs.length != network[0].length)
             throw new IllegalArgumentException("inputs number and input " +
                     "layer size do not correspond");
@@ -76,7 +97,7 @@ public class Network {
         Neuron outputNode = network[network.length-1][0];
         outputNode.outputDeriv = errorFunc.der(outputNode.output, target);
 
-        for (int layerId = network.length-1; layerId >= 0; layerId--){
+        for (int layerId = network.length-1; layerId >= 1; layerId--){
             //computing each neuron's error derivative
             for (int i = 0; i < network[layerId].length; i++){
                 Neuron neuron = network[layerId][i];
@@ -84,10 +105,11 @@ public class Network {
                 neuron.accInputDeriv += neuron.inputDeriv;
                 neuron.numAccDerivErrs++;
             }
+            System.out.println("layer " + layerId + " neuron errors done");
 
             for (int i = 0; i < network[layerId].length; i++){
                 Neuron n = network[layerId][i];
-                for (int j = 0; j < n.inputLinks.size(); i++){
+                for (int j = 0; j < n.inputLinks.size(); j++){
                     Link link = n.inputLinks.get(j);
                     if (link.isDead)
                         continue;
@@ -96,6 +118,7 @@ public class Network {
                     link.accErrorDeriv += link.errorDeriv;
                     link.numAccDerivs++;
                 }
+                System.out.println("layer " + layerId + " links done");
             }
             if (layerId == 1)
                 continue;
@@ -108,6 +131,7 @@ public class Network {
                     n.outputDeriv += output.weight * output.destination.inputDeriv;
                 }
             }
+            System.out.println("layer " + layerId + " output links done");
         }
     }
 
@@ -147,5 +171,31 @@ public class Network {
                 }
             }
         }
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        for (Neuron[] aNetwork : network) {
+            for (Neuron n : aNetwork) {
+                sb.append(n.toString());
+                for (Link l : n.outputLinks) {
+                    sb.append(l.toString());
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public double outputForPoint(Point p){
+      //  double sum = 0d;
+        //for (int i = 0; i < network[network.length-1].length; i++){
+         //   sum+= network[network.length-1][i].output;
+        //}
+        return network[network.length-1][0].output;
+    }
+
+    public boolean test(Point testCase){
+        return outputForPoint(testCase) * testCase.value > 0; // signs of point's value and network's output
     }
 }

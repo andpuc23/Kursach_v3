@@ -3,11 +3,12 @@ package ML.RBF;
 import Points.Point;
 
 public class HiddenNeuron {
-    String id;
+    public String id;
 
     public double sigma;
-    int wX;
-    int wY;
+    public double weight;
+    public int wX;
+    public int wY;
 
     double distanceTo(Point p){
         return Math.sqrt((wX - p.getCartesian()[0]) * (wX - p.getCartesian()[0]) +
