@@ -16,9 +16,9 @@ class Neuron:
         self.weight = 0
 
     def __str__(self):
-        return "hidden neuron {}; sigma: {};" \
-               "coords:({};{})". \
-            format(self.id, self.sigma,
+        return "hidden neuron {}; {}; " \
+               "({}; {})". \
+            format(self.id, self.weight,
                    self.wX, self.wY)
 
     def error(self, p: Point):
@@ -32,6 +32,14 @@ class Neuron:
 
 
 class RBF(NetworkInterface):
+    def to_string(self) -> str:
+        structure = ''
+        for neuron in self.hidden_neurons:
+            structure += str(neuron) + '\n'
+
+        print(structure)
+        return structure
+
     __curr_id = 1
 
     def __init__(self,
@@ -57,9 +65,6 @@ class RBF(NetworkInterface):
     def train(self, points: list):
         for point in points:
             self.add_neuron(point)
-
-    def structure(self):
-        return self.hidden_neurons
 
     def predict(self, point=None, points=None):
         if points is None:

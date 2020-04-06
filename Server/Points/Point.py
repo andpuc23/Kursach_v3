@@ -23,4 +23,4 @@ class Point:
         return sqrt((self.X - other.X)**2 + (self.Y-other.Y)**2)
 
     def __str__(self):
-        return self.get_cartesian(), self.val
+        return "{}, {}, {}\n".format(self.X, self.Y, self.val)

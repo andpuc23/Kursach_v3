@@ -5,24 +5,20 @@ from Points import PointsGenerator
 
 class NetworkInterface(ABC):
     @abstractmethod
-    def train(self, batch):
+    def train(self, batch) -> str:
         pass
 
     @abstractmethod
-    def structure(self):
+    def predict(self, point):
         pass
 
     @abstractmethod
-    def predict(self, points: list = None, point=None):
-        pass
+    def to_string(self) -> str: pass
 
     def results(self):
         sz = PointsGenerator.POINTS_SIZE
         """returns an 2D-array with predictions for every point of field"""
         field = np.zeros(shape=[sz, sz], dtype=float)
-        # field = np.zeros_like(PointsGenerator.POINTS_SIZE,
-        #                       PointsGenerator.POINTS_SIZE,
-        #                       dtype=float)
         for (x, y), _ in np.ndenumerate(field):
             field[x, y] = self.predict(point=
                                        PointsGenerator.Point
