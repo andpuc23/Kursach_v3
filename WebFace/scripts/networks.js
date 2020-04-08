@@ -14,30 +14,67 @@ class Point{
     }
 }
 
+class ActivationFunction{
+    der = function(input){return 0};
+    error = function(input){return 0};
+}
+
+class Activations{
+    TANH = class{
+        output = function (input) { return Math.tan(input)};
+        der = function(input) {
+            return 1 - this.output(input)*this.output(input)
+        }
+    };
+
+    RELU = class {
+        output = function(x){return Math.max(0,x)};
+        der = function (x){return x <= 0 ? 0: 1};
+    };
+
+    SIGMOID = class {
+        output = function(x){return q/(1+Math.exp(-x))};
+        der = function(x) {return this.output(x) * (1 - this.output(x))};
+    };
+
+    LINEAR = class {
+        output = function(x){return x};
+        der = function(x) {return 1};
+    }
+}
+
 class Mlp_node {
-    constructor(data){ //data comes as it is, no preparation
+    constructor(data, callback){ //data comes as it is, no preparation
         this.outputs = [];
         this.inputs = [];
         if (typeof data === 'string') {
             data = data.substr(5);
             let ar = data.split("; ");
             this.id = ar[0];
-            this.bias = Number(ar[1])
+            this.bias = Number(ar[1]);
+            this.activation = callback.activation;
         }
     }
-
+    updateOutput = function () {
+        this.totalInput = this.bias;
+        for (let i = 0; i < this.inputs.length; j++){
+            let link = this.inputs[i];
+            this.totalInput += link.weight*link.start.output;
+        }
+        this.output = this.activation.output(this.totalInput);
+    }
 }
 
 class Mlp_link {
-    constructor(data) {
+    constructor(data, callback) {
         if (typeof data === 'string') {
             data = data.substr(5);
             let ar = data.split("; ");
             this.id = ar[0];
             this.weight = Number(ar[1]);
             let path = this.id.split('-');
-            this.start = Number(path[0]);
-            this.end = Number(path[1]);
+            this.start = callback.get_node_by_id(Number(path[0]));
+            this.end = callback.get_node_by_id(Number(path[1]));
         }
     }
 }
@@ -48,10 +85,21 @@ class Mlp {
             let parts = data.split('\n');
             let sizes = parts[0].substr(1, parts[0].length-1).split(',');
             this.inputs = parts[1];
+
+            this.s_activation = parts[2];
+            if (this.s_activation === 'linear')
+                this.activation = Activations.LINEAR;
+            else if (this.s_activation === 'relu')
+                this.activation = Activations.RELU;
+            else if (this.s_activation === 'sigmoid')
+                this.activation = Activations.SIGMOID;
+            else if (this.s_activation === 'tanh')
+                this.activation = Activations.TANH;
+
             this.structure = Mlp_node[sizes.length][Math.max(sizes)];
-            for (let part in parts){
+            for (let part in parts.slice(3, sizes.length)){
                 if (part.substr(0,4) === 'node'){
-                    let node = Mlp_node(part);
+                    let node = Mlp_node(part, this);
                     let layer = div(node.id, 100);
                     let pos = node.id % 100;
                     this.structure[layer][pos] = node;
@@ -59,7 +107,7 @@ class Mlp {
             }
             for (let part in parts){
                 if (part.substr(0,4) === 'link') {
-                    let link = Mlp_link(part);
+                    let link = Mlp_link(part, this);
                     let start = this.get_node_by_id(link.start);
                     let finish = this.get_node_by_id(link.end);
                     start.outputs.push(link);
@@ -123,6 +171,8 @@ class Mlp {
 
         return this.structure[this.structure.length - 1][0].output;
     };
+
+
 
     get_loss = function(test_set){
         let loss = 0;

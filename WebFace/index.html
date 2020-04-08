@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="styles.css" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Material+Icons" rel="stylesheet" type="text/css">
-  <script type="text/javascript" src="scripts/grabAndSend.js"></script>
-  <script type="text/javascript" src="scripts/scripts.js"></script>
-  <script type="text/javascript" src="networks.js"></script>
+<!--  <script type="text/javascript" src="scripts/grabAndSend.js"></script>-->
+  <script type="module" src="scripts/networks.js"></script>
+  <script type="module" src="scripts/scripts.js"></script>
 </head>
 <body>
   <!-- Top Controls -->
@@ -32,62 +32,72 @@
         </button>
       </div>
       <form id="inputs" action="http://localhost:8080" method="get" target="_self">
-<!--        <input type="submit" value="Start" id="sendButton"/>-->
-        <input type="button" value="Start" id="sendButton"/>
-        <label for="NNtype">Network type:</label>
-        <select id="NNtype">
-          <option value="mlp">MultiLayer Perceptron</option>
-          <option value="rbf">Radial-basis Function Network</option>
-        </select>
+        <div class="horizontal_control">
+          <label for="NNtype">Network type:</label><br/>
+          <select id="NNtype">
+            <option value="mlp">MultiLayer Perceptron</option>
+            <option value="rbf">Radial-basis Function Network</option>
+          </select>
+        </div>
 
-        <label for="myLearningRate">Learning rate:</label><br/>
-        <select id="myLearningRate">
-          <option value="0.00001">0.00001</option>
-          <option value="0.0001">0.0001</option>
-          <option value="0.001">0.001</option>
-          <option value="0.003">0.003</option>
-          <option value="0.01">0.01</option>
-          <option value="0.03">0.03</option>
-          <option value="0.1">0.1</option>
-          <option value="0.3">0.3</option>
-          <option value="1">1</option>
-          <option value="3">3</option>
-          <option value="10">10</option>
-        </select>
+        <div class="horizontal_control">
+          <label for="myLearningRate">Learning rate:</label><br/>
+          <select id="myLearningRate">
+            <option value="0.00001">0.00001</option>
+            <option value="0.0001">0.0001</option>
+            <option value="0.001">0.001</option>
+            <option value="0.003">0.003</option>
+            <option value="0.01">0.01</option>
+            <option value="0.03">0.03</option>
+            <option value="0.1">0.1</option>
+            <option value="0.3">0.3</option>
+            <option value="1">1</option>
+            <option value="3">3</option>
+            <option value="10">10</option>
+          </select>
+        </div>
 
-        <label for="myActivations">Activation function:</label><br/>
-        <select id="myActivations">
-          <option value="relu">RELU</option>
-          <option value="tanh">Tanh</option>
-          <option value="sigmoid">Sigmoid</option>
-          <option value="linear">Linear</option>
-        </select>
+        <div class="horizontal_control">
+          <label for="myActivations">Activation function:</label><br/>
+          <select id="myActivations">
+            <option value="relu">RELU</option>
+            <option value="tanh">Tanh</option>
+            <option value="sigmoid">Sigmoid</option>
+            <option value="linear">Linear</option>
+          </select>
+        </div>
 
-        <label for="myRegularizations">Regularization:</label><br/>
-        <select id="myRegularizations">
-          <option value="none">None</option>
-          <option value="L1">L1</option>
-          <option value="L2">L2</option>
-        </select>
+        <div class="horizontal_control">
+          <label for="myRegularizations">Regularization:</label><br/>
+          <select id="myRegularizations">
+            <option value="none">None</option>
+            <option value="L1">L1</option>
+            <option value="L2">L2</option>
+          </select>
+        </div>
 
-        <label for="myRegularizationRate">Regularization rate:</label><br/>
-        <select id="myRegularizationRate">
-          <option value="0.001">0.001</option>
-          <option value="0.003">0.003</option>
-          <option value="0.01">0.01</option>
-          <option value="0.03">0.03</option>
-          <option value="0.1">0.1</option>
-          <option value="0.3">0.3</option>
-          <option value="1">1</option>
-          <option value="3">3</option>
-          <option value="10">10</option>
-        </select>
+        <div class="horizontal_control">
+          <label for="myRegularizationRate">Regularization rate:</label><br/>
+          <select id="myRegularizationRate">
+            <option value="0.001">0.001</option>
+            <option value="0.003">0.003</option>
+            <option value="0.01">0.01</option>
+            <option value="0.03">0.03</option>
+            <option value="0.1">0.1</option>
+            <option value="0.3">0.3</option>
+            <option value="1">1</option>
+            <option value="3">3</option>
+            <option value="10">10</option>
+          </select>
+        </div>
 
-        <label for="myProblem">Problem:</label><br/>
-        <select id="myProblem">
-          <option value="classification">Classification</option>
-          <option value="regression">Regression</option>
-        </select>
+        <div class="horizontal_control">
+          <label for="myProblem">Problem:</label><br/>
+          <select id="myProblem">
+            <option value="classification">Classification</option>
+            <option value="regression">Regression</option>
+          </select>
+        </div>
       </form>
 <!--      <div class="control">-->
 <!--        <span class="label">Epoch</span>-->

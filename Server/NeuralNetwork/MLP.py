@@ -74,10 +74,15 @@ class Regularizations:
             elif weight < 0: return -1
             else: return 0
 
+        def __str__(self):
+            return 'L1'
     class L2(RegularizationFunction):
         def output(weight: float): return 0.5*weight*weight
 
         def der(weight: float): return weight
+
+        def __str__(self):
+            return 'L2'
 
 
 class Node:
@@ -114,8 +119,10 @@ class Node:
         return self.output
 
     def to_string(self):
-        """returns string of format "node <self.id>; <self.bias>"
-            required for data transfer to client"""
+        """
+            returns string of format "node <self.id>; <self.bias>"
+            required for data transfer to client
+            """
         return "node {}; {}".format(self.id, self.bias)
 
 
@@ -247,11 +254,18 @@ class MLP(NetworkInterface):
                     link.num_accumulated_ders = 0
 
     def to_string(self):
-        struct = '{}\n'.format(self.shape)
-        struct += ",".join(self.inputs) + "\n"
+        s_activation = 'linear' \
+            if isinstance(self.network[0][0].activation, Activations.LINEAR) \
+            else ('tanh' if isinstance(self.network[0][0].activation, Activations.TANH)
+            else ('relu' if isinstance(self.network[0][0].activation, Activations.RELU)
+            else 'sigmoid'))
+
+        struct = 'MLP\n{}\n'.format(self.shape)
+        struct += ",".join(self.inputs)
+        struct += '\n'+s_activation
         for i in range(len(self.network)):
             for node in self.network[i]:
-                struct += node.to_string() + '\n'
+                struct += '\n' + node.to_string() + '\n'
                 struct += '\n'.join([link.to_string() for link in node.input_links])
 
         print(struct)

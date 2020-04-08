@@ -204,7 +204,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def do_get_points(self):
         number = int(self.parameters[0])
-
         points = []
         for i in range(number):
             points.append(self.generator.get_point())
@@ -221,6 +220,3 @@ if __name__ == '__main__':
     httpd = HTTPServer((HOST, PORT), RequestHandler)
     print('server started at', HOST, PORT)
     httpd.serve_forever()
-
-
-

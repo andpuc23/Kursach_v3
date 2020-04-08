@@ -33,7 +33,7 @@ class Neuron:
 
 class RBF(NetworkInterface):
     def to_string(self) -> str:
-        structure = ''
+        structure = 'rbf\n{}'.format(self.neuron_sigma)
         for neuron in self.hidden_neurons:
             structure += str(neuron) + '\n'
 

@@ -40,6 +40,16 @@ body {
   margin: 0;
 }
 
+.horizontal_control{
+    float: left;
+    text-align: left;
+    background-color: white;
+    /*color: rgba(255, 255, 255, 0.7);*/
+    font-size: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .l--body {
   width: 550px;
   margin-left: auto;
