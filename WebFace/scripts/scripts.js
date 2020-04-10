@@ -432,9 +432,6 @@ function addRow(rowNum){
     newCol.setAttribute('class', 'layer-column');
     newCol.setAttribute('id', rowId);
 
-    for (let i = 0; i < layers[rowNum]; i++)
-        addNeuron(rowNum+'0'+i);
-
     let buttons = document.createElement('div');
     newCol.appendChild(buttons);
     buttons.setAttribute('class', 'neuron-buttons');
@@ -443,7 +440,7 @@ function addRow(rowNum){
     buttons.appendChild(addButton);
     addButton.setAttribute('class', 'mdl-button mdl-js-button mdl-button--icon layers-button');
     addButton.setAttribute('id', 'add-'+rowNum);
-    addButton.setAttribute('onclick', `addNextNeuron('row-'+${rowNum})`);
+    addButton.setAttribute('onclick', `addNextNeuron('${rowId}')`);
     let add = document.createElement('i');
     addButton.appendChild(add);
     add.setAttribute('class', 'material-icons');
@@ -454,11 +451,14 @@ function addRow(rowNum){
     buttons.appendChild(removeButton);
     removeButton.setAttribute('class', 'mdl-button mdl-js-button mdl-button--icon layers-button');
     removeButton.setAttribute('id', 'remove-'+rowNum);
-    removeButton.setAttribute('onclick', `removeNeuron('row-'+${rowNum})`);
+    removeButton.setAttribute('onclick', `removeNeuron('${rowId}')`);
     let remove = document.createElement('i');
     remove.setAttribute('class', 'material-icons');
     removeButton.appendChild(remove);
     remove.innerText='remove';
+
+    for (let i = 0; i < layers[rowNum]; i++)
+        addNeuron(rowNum+'0'+i);
 }
 
 function removeLayer(){
@@ -491,16 +491,21 @@ function addNeuron(sNeuronId){
     parent.appendChild(neuron);
 }
 
-function addNextNeuron(rowNum){
-    let row = document.getElementById('row-'+rowNum);
-    let children = row.childNodes;
-    if (children.length === layers[rowNum])
-        return false;
-    else{
-        addNeuron(rowNum+'0'+children.length);
-        layers[rowNum]++;
-    }
+function addNextNeuron(rowId){
+    let row = document.getElementById(rowId);
+    let rowNum = parseInt(rowId.substr(4));
+    let children = row.querySelectorAll("div.neuron");
+    addNeuron(rowNum+'0'+children.length);
+    layers[rowNum]++;
 }
 
 function removeNeuron(rowId) {
+    let row = document.getElementById(rowId);
+    let rowNum = parseInt(rowId.substr(4));
+    let children = row.querySelectorAll("div.neuron");
+    if (children.length > 1){
+        let child = document.getElementById(rowNum+'0'+(layers[rowNum]-1));
+        child.parentNode.removeChild(child);
+        layers[rowNum]--;
+    }
 }

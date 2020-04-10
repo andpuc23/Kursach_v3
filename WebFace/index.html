@@ -205,29 +205,29 @@
 
       <div id="columns" style="border: 1px solid red; min-height: 20px; overflow: hidden">
         <div class="layer-column" id="row-0">
+          <div class="neuron-buttons">
+            <button id="add-0" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="addNextNeuron('row-0')">
+              <i class="material-icons">add</i>
+            </button>
+            <button id="remove-0" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="removeNeuron('row-0')">
+              <i class="material-icons">remove</i>
+            </button>
+          </div>
           <div class="neuron" id="000"></div>
           <div class="neuron" id="001"></div>
           <div class="neuron" id="002"></div>
           <div class="neuron" id="003"></div>
-          <div class="neuron-buttons">
-            <button id="add-0" class="mdl-button mdl-js-button mdl-button--icon layers-button">
-              <i class="material-icons">add</i>
-            </button>
-            <button id="remove-0" class="mdl-button mdl-js-button mdl-button--icon layers-button">
-              <i class="material-icons">remove</i>
-            </button>
-          </div>
         </div>
         <div class="layer-column" id="row-1">
-          <div class="neuron" id="100"></div>
-          <div class="neuron" id="101"></div>
           <div class="neuron-buttons">
-            <button id="add-1" class="mdl-button mdl-js-button mdl-button--icon layers-button">
+            <button id="add-1" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="addNextNeuron('row-1')">
               <i class="material-icons">add</i>
             </button>
-            <button id="remove-1" class="mdl-button mdl-js-button mdl-button--icon layers-button">
+            <button id="remove-1" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="removeNeuron('row-1')">
               <i class="material-icons">remove</i>
             </button>
+            <div class="neuron" id="100"></div>
+            <div class="neuron" id="101"></div>
           </div>
         </div>
       </div>
