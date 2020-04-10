@@ -83,7 +83,13 @@ class Mlp {
     constructor(data){
         if (typeof data === "string"){
             let parts = data.split('\n');
-            let sizes = parts[0].substr(1, parts[0].length-1).split(',');
+            let sizes = [];
+            parts[0].
+                substr(1, parts[0].length-1).
+                split(',').forEach(
+                    function(item){
+                    sizes.push(Number(item))
+                    });
             this.inputs = parts[1];
 
             this.s_activation = parts[2];
@@ -96,7 +102,10 @@ class Mlp {
             else if (this.s_activation === 'tanh')
                 this.activation = Activations.TANH;
 
-            this.structure = Mlp_node[sizes.length][Math.max(sizes)];
+            this.structure = new Array(sizes.length);
+            for (let i = 0; i < sizes.length; i++){
+                this.structure[i] = new Array(sizes[i]);
+            }
             for (let part in parts.slice(3, sizes.length)){
                 if (part.substr(0,4) === 'node'){
                     let node = Mlp_node(part, this);
@@ -204,6 +213,7 @@ class Mlp {
         return inputs;
     }
 }
+
 
 class Rbf_node{
     constructor(data){

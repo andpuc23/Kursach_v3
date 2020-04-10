@@ -44,10 +44,30 @@ body {
     float: left;
     text-align: left;
     background-color: white;
-    /*color: rgba(255, 255, 255, 0.7);*/
     font-size: 15px;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.feature {
+    height: 34px;
+    width: 34px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 3px;
+}
+
+.input-feature{
+    float: right;
+    margin-left: auto;
+    margin-bottom: 15px;
+    text-align: right;
+    margin-right: 0;
+}
+
+
+.feature-wrapper{
+    display: flex;
 }
 
 .l--body {
@@ -267,12 +287,25 @@ header h1 .optional {
   padding: 12px 12px;
 }
 
-#play-pause-button .material-icons {
-  color: white;
-  font-size: 36px;
+.ui-button{
+  border: none;
+  background-color: #fdfdfd;
+}
+
+.layers-button{
+  border: none;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  text-align: center;
 }
 
 
+
+#play-pause-button .material-icons {
+  color: white;
+  text-align: center;
+  font-size: 36px;
+}
 
 #play-pause-button .material-icons:nth-of-type(2) {
   display: none;
@@ -385,6 +418,7 @@ header h1 .optional {
   margin-bottom: 50px;
   padding-top: 2px;
   position: relative;
+  height: 500px;
 }
 
 @media (min-height: 700px) {
@@ -515,18 +549,10 @@ g.column rect {
   cursor: pointer;
   width: 100%;
   height: 100%;
-  opacity: 0.2;
-  border: 2px solid rgba(0,0,0,0.1);
+  background-color: white;
+  border: 2px solid black;
   border-radius: 3px;
 }
-
-/*.data.column .dataset:first-of-type {
-  margin-top: 8px;
-}
-
-.data.column .dataset:last-of-type {
-  margin-bottom: 20px;
-}*/
 
 .data.column .data-thumbnail:hover {
   border: 2px solid #999;
@@ -646,6 +672,7 @@ g.column rect {
   top: 110px;
   left: 0;
   z-index: 100;
+    width: 100px;
 }
 
 #network svg .main-label {
@@ -667,6 +694,24 @@ g.column rect {
 
 .axis path {
   display: none;
+}
+
+.layer-column{
+  border: 1px solid yellow;
+  height: auto;
+  width: 49%;
+  min-width: 50px;
+  min-height: 10px;
+  display: inline-block;
+  text-align: center;
+}
+
+.neuron{
+  border: 1px solid green;
+  height: 40px;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 
 #network svg .active .main-label {
@@ -744,6 +789,7 @@ g.column rect {
 /* Hidden layers column */
 
 .hidden-layers.column {
+  margin-top: 40px;
   width: 40%;
 }
 

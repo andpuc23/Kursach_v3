@@ -268,7 +268,6 @@ class MLP(NetworkInterface):
                 struct += '\n' + node.to_string() + '\n'
                 struct += '\n'.join([link.to_string() for link in node.input_links])
 
-        print(struct)
         return struct
 
     def train(self, point: Point, learningRate: float = 0.03, regularizationRate: float = 0, ):

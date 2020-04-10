@@ -37,7 +37,6 @@ class RBF(NetworkInterface):
         for neuron in self.hidden_neurons:
             structure += str(neuron) + '\n'
 
-        print(structure)
         return structure
 
     __curr_id = 1

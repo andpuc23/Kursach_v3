@@ -38,6 +38,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'DNT,X-CustomHeader,Keep-Alive,'
                                                          'User-Agent,X-Requested-With,If-Modified-Since,'
                                                          'Cache-Control,Content-Type')
+        # self.send_header("Connection", "Upgrade")
+        # self.send_header("Sec_WebSocket-Accept")
         self.end_headers()
 
     def parse_request(self):
@@ -203,6 +205,19 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_error(500, 'unknown params', 'unknown {} param for \'update\' command'.format(entity))
 
     def do_get_points(self):
+
+        if self.generator is None or self.generator.type() != self.parameters[1]:
+            shape = self.parameters[1]
+            if shape == 'circle':
+                params = [50, 75, 100]
+            elif shape == 'xor':
+                params = [100]
+            elif shape == 'spiral':
+                params = [2]
+            else:  # shape == 'cluster'
+                params = [50, 50, -50, -50, 75]
+            self._init_generator(shape, params)
+
         number = int(self.parameters[0])
         points = []
         for i in range(number):
@@ -212,8 +227,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         for point in points:
             response += str(point)
 
-        print('response:', response)
-        self.send_results(response)
+        self.send_results(response.encode('utf-8'))
 
 
 if __name__ == '__main__':

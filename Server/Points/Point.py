@@ -20,7 +20,10 @@ class Point:
             self.Y = int(ro*sin(phi))
 
     def distance_to(self, other):
-        return sqrt((self.X - other.X)**2 + (self.Y-other.Y)**2)
+        if not hasattr(other, 'X'):
+            return sqrt((self.X - other[0])**2 + (self.Y-other[1])**2)
+        else:
+            return sqrt((self.X - other.X) ** 2 + (self.Y - other.Y) ** 2)
 
     def __str__(self):
         return "{}, {}, {}\n".format(self.X, self.Y, self.val)

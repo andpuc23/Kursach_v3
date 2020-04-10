@@ -15,6 +15,9 @@ class Generator:
             res.append(self.get_point())
         return res
 
+    def type(self):
+        pass
+
 
 class SpiralsPoints(Generator):
     def __init__(self, coeff: float):
@@ -22,7 +25,7 @@ class SpiralsPoints(Generator):
         self.generate_first = True
 
     def get_point(self):
-        k = randint(0, 100)
+        k = randint(0, POINTS_SIZE)
         ro = k * .75
         phi = ro * self.coeff
 
@@ -31,6 +34,9 @@ class SpiralsPoints(Generator):
             return Point(ro=ro, phi=phi, val=1)
         else:
             return Point(ro=ro, phi=phi, val=-1)
+
+    def type(self):
+        return 'spiral'
 
 
 class ClusterPoints(Generator):
@@ -45,11 +51,22 @@ class ClusterPoints(Generator):
         if self.generate_first:
             x = self.center1[0] + randint(-self.size, self.size)
             y = self.center1[1] + randint(-self.size, self.size)
-            return Point(x=x, y=y, val=1)
+            point = Point(x=x, y=y, val=1)
+            if point.distance_to(self.center1) > self.size:
+                return self.get_point()
+            else:
+                return point
         else:
             x = self.center2[0] + randint(-self.size, self.size)
             y = self.center2[1] + randint(-self.size, self.size)
-            return Point(x=x, y=y, val=-1)
+            point = Point(x=x, y=y, val=-1)
+            if point.distance_to(self.center2) > self.size:
+                return self.get_point()
+            else:
+                return point
+
+    def type(self):
+        return 'cluster'
 
 
 class XorPoints(Generator):
@@ -60,6 +77,9 @@ class XorPoints(Generator):
         x = randint(-self.size, self.size+1)
         y = randint(-self.size, self.size+1)
         return Point(1 if x*y > 0 else -1, x=x, y=y)
+
+    def type(self):
+        return 'XOR'
 
 
 class CirclePoints(Generator):
@@ -80,3 +100,6 @@ class CirclePoints(Generator):
             return Point(ro=ro, phi=phi, val=1)
         else:
             return Point(ro=ro, phi=phi, val=-1)
+
+    def type(self):
+        return 'circle'
