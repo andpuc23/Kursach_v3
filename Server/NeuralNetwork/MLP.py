@@ -3,27 +3,46 @@ import random
 import numpy as np
 from NeuralNetwork.NetworkInterface import NetworkInterface
 from Points import *
+import json
 
 
 class InputFunction:
-    def X(x:float, y:float): return x
-    def Y(x:float, y:float): return y
-    def X2(x:float, y:float): return x*x
-    def Y2(x:float, y:float): return y*y
-    def XY(x:float, y:float): return x*y
-    def sX(x:float, y:float): return np.sin(x)
-    def sY(x:float, y:float): return np.sin(y)
+    @staticmethod
+    def X(x: float, y: float): return x
+
+    @staticmethod
+    def Y(x: float, y: float): return y
+
+    @staticmethod
+    def X2(x: float, y: float): return x * x
+
+    @staticmethod
+    def Y2(x: float, y: float): return y * y
+
+    @staticmethod
+    def XY(x: float, y: float): return x * y
+
+    @staticmethod
+    def sX(x: float, y: float): return np.sin(x)
+
+    @staticmethod
+    def sY(x: float, y: float): return np.sin(y)
+
 
 class ErrorFunction:
+    @staticmethod
     def error(output: float, target: float) -> float: pass
 
+    @staticmethod
     def der(output: float, target: float) -> float: pass
 
 
 class ActivationFunction:
-    def output(self, input: float) -> float: pass
+    def output(self, inp: float) -> float: pass
 
-    def der(self, input: float) -> float: pass
+    def der(self, inp: float) -> float: pass
+
+    def __str__(self) -> str: pass
 
 
 class RegularizationFunction:
@@ -34,9 +53,11 @@ class RegularizationFunction:
 
 class Errors:
     class SQUARE(ErrorFunction):
-        def error(output: float, target): return 0.5*(output-target)**2
+        @staticmethod
+        def error(output: float, target): return 0.5 * (output - target) ** 2
 
-        def der(output: float, target): return output-target
+        @staticmethod
+        def der(output: float, target): return output - target
 
 
 class Activations:
@@ -45,39 +66,56 @@ class Activations:
 
         def der(self, x: float):
             output = self.output(x)
-            return 1 - output**2
+            return 1 - output ** 2
+
+        def __str__(self):
+            return "tanh"
 
     class RELU(ActivationFunction):
         def output(self, x: float): return max(0, x)
 
         def der(self, x): return 1 if x > 0 else 0
 
+        def __str__(self):
+            return "relu"
+
     class SIGMOID(ActivationFunction):
-        def output(self, x): return 1/(1+math.exp(-x))
+        def output(self, x): return 1 / (1 + math.exp(-x))
 
         def der(self, x):
             output = self.output(x)
-            return output*(1 - output)
+            return output * (1 - output)
+
+        def __str__(self):
+            return "sigmoid"
 
     class LINEAR(ActivationFunction):
         def output(self, input): return input
 
         def der(self, input): return 1
 
+        def __str__(self):
+            return "linear"
+
 
 class Regularizations:
     class L1(RegularizationFunction):
-        def output(weight: float): return abs(weight)
+        def output(weight: float):
+            return abs(weight)
 
         def der(weight: float):
-            if weight > 0: return 1
-            elif weight < 0: return -1
-            else: return 0
+            if weight > 0:
+                return 1
+            elif weight < 0:
+                return -1
+            else:
+                return 0
 
         def __str__(self):
             return 'L1'
+
     class L2(RegularizationFunction):
-        def output(weight: float): return 0.5*weight*weight
+        def output(weight: float): return 0.5 * weight * weight
 
         def der(weight: float): return weight
 
@@ -89,7 +127,7 @@ class Node:
     id: str
     input_links = []
     bias = 0.1
-    outputs = []
+    output_links = []
     total_input: float
     output: float
     output_der = 0
@@ -125,12 +163,35 @@ class Node:
             """
         return "node {}; {}".format(self.id, self.bias)
 
+    def to_json(self):
+        class Encoder(json.JSONEncoder):
+            def encode(self, nod: Node) -> str:
+                res = "{"
+                res += "\"id\": " + nod.id
+                res += ", \"bias\": " + str(nod.bias)
+                res += ", \"inputs\": ["
+
+                for link in nod.input_links:
+                    res += "{\"is_dead\":" + str(link.is_dead) + ", \"weight\": " + str(link.weight) + \
+                           ", \"id\": \"" + str(link.source.id + "-" + link.dest.id) + "\"},"
+                res = res[:-1]  # remove last ','
+                res += "], \"outputs\": ["
+
+                for link in nod.output_links:
+                    res += "{\"is_dead\":" + str(link.is_dead) + ", \"weight\": " + str(link.weight) + \
+                           ", \"id\": \"" + str(link.source.id + "-" + link.dest.id) + "\"},"
+
+                res = res[:-1]
+                return res + "]}"
+
+        return Encoder().encode(self)
+
 
 class Link:
     id: str
     source: Node
     dest: Node
-    is_dead = False
+    is_dead: bool
     error_der = 0
     acc_error_der = 0
     num_accumulated_ders = 0
@@ -142,21 +203,22 @@ class Link:
         self.source = source
         self.dest = dest
         self.regularization = regularization
+        self.is_dead = False
 
     def to_string(self):
         """returns string of format "link <i-j>; <self.weight>"
                     required for data transfer to client"""
         return "link {}; {}".format(self.id, self.weight)
-                                                             
+
 
 class MLP(NetworkInterface):
     def __init__(self,
                  network_shape: tuple,
-                 activation: type(Activations.TANH),
-                 output_activation: type(Activations.LINEAR),
+                 activation: ActivationFunction,
+                 output_activation: ActivationFunction,
                  learn_rate: float,
                  regul_rate: float,
-                 regularization: type(Regularizations.L2),
+                 regularization: RegularizationFunction,
                  input_ids: list,
                  ):
         self.learn_rate = learn_rate
@@ -177,14 +239,14 @@ class MLP(NetworkInterface):
                 node_id = id
                 id += 1
 
-                node = Node(str(100*layer_idx + node_id), output_activation if is_output else activation)
+                node = Node(str(100 * layer_idx + node_id), output_activation if is_output else activation)
                 current_layer.append(node)
                 if not is_input:
                     # add links to previous layer
-                    for j in range(len(self.network[layer_idx-1])):
-                        prev_node = self.network[layer_idx-1][j]
+                    for j in range(len(self.network[layer_idx - 1])):
+                        prev_node = self.network[layer_idx - 1][j]
                         link = Link(prev_node, node, regularization)
-                        prev_node.outputs.append(link)
+                        prev_node.output_links.append(link)
                         node.input_links.append(link)
 
     def forward_propagation(self, inputs: list) -> float:
@@ -211,18 +273,19 @@ class MLP(NetworkInterface):
 
             for node in current_layer:
                 for link in node.input_links:
-                    if link.is_dead: continue
-
+                    if link.is_dead:
+                        continue
                     link.error_der = node.input_der * link.source.output
                     link.acc_error_der += link.error_der
                     link.num_accumulated_ders += 1
-                    
-            if layer_idx == 1: continue
 
-            prev_layer = self.network[layer_idx-1]
+            if layer_idx == 1:
+                continue
+
+            prev_layer = self.network[layer_idx - 1]
             for node in prev_layer:
                 node.output_der = 0
-                for output in node.outputs:
+                for output in node.output_links:
                     node.output_der += output.weight * output.dest.input_der
 
     def update_weights(self):
@@ -236,15 +299,15 @@ class MLP(NetworkInterface):
                     node.num_accumulated_ders = 0
 
                 for link in node.input_links:
-                    if link.is_dead: continue
-
+                    if link.is_dead:
+                        continue
                     regul_der = link.regularization.der(link.weight) \
                         if link.regularization is not None \
                         else 0
 
-                    new_link_weight = link.weight - learning_rate*regularization_rate*regul_der
+                    new_link_weight = link.weight - learning_rate * regularization_rate * regul_der
 
-                    if link.regularization is Regularizations.L1 and link.weight*new_link_weight == 0:
+                    if link.regularization is Regularizations.L1 and link.weight * new_link_weight == 0:
                         link.weight = 0
                         link.is_dead = True
                     else:
@@ -257,12 +320,12 @@ class MLP(NetworkInterface):
         s_activation = 'linear' \
             if isinstance(self.network[0][0].activation, Activations.LINEAR) \
             else ('tanh' if isinstance(self.network[0][0].activation, Activations.TANH)
-            else ('relu' if isinstance(self.network[0][0].activation, Activations.RELU)
-            else 'sigmoid'))
+                  else ('relu' if isinstance(self.network[0][0].activation, Activations.RELU)
+                        else 'sigmoid'))
 
         struct = 'MLP\n{}\n'.format(self.shape)
         struct += ",".join(self.inputs)
-        struct += '\n'+s_activation
+        struct += '\n' + s_activation
         for i in range(len(self.network)):
             for node in self.network[i]:
                 struct += '\n' + node.to_string() + '\n'
@@ -299,19 +362,43 @@ class MLP(NetworkInterface):
         x = X[0]
         y = X[1]
 
-        for id in self.inputs:
-            if id == 'X':
+        for inp in self.inputs:
+            if inp == 'X':
                 inputs.append(InputFunction.X(x, y))
-            elif id == "Y":
+            elif inp == "Y":
                 inputs.append(InputFunction.Y(x, y))
-            elif id == "X2":
+            elif inp == "X2":
                 inputs.append(InputFunction.X2(x, y))
-            elif id == "Y2":
+            elif inp == "Y2":
                 inputs.append(InputFunction.Y2(x, y))
-            elif id == "XY":
+            elif inp == "XY":
                 inputs.append(InputFunction.XY(x, y))
-            elif id == 'sX':
+            elif inp == 'sX':
                 inputs.append(InputFunction.sX(x, y))
             else:
                 inputs.append(InputFunction.sY(x, y))
         return inputs
+
+    def to_json(self):
+        class Encoder(json.JSONEncoder):
+            def encode(self, net: MLP) -> str:
+                res = "{"
+                res += "\"shape\": " + json.dumps(net.shape)
+                res += ", \"learn_rate\": {}".format(net.learn_rate)
+                res += ", \"regularization_rate\": {}".format(net.regularization_rate)
+                res += ", \"input_ids\": " + json.dumps(net.inputs)
+                res += ", \"activation\": \"" + str(net.network[0][0].activation)
+                res += "\", \"regularization\": \"" + str(net.network[0][0].input_links[0].regularization)
+
+                res += "\", \"nodes\": ["
+                for layer in net.network:
+                    for node in layer:
+                        res += node.to_json() + ", "
+                res = res[:-2]
+                return (res + "]}").lower()
+
+        return Encoder().encode(self)
+
+
+o = MLP((1, 2), Activations.TANH(), Activations.LINEAR(), 0.1, 0, Regularizations.L1(), [1, 2, 3])
+print(o.to_json())

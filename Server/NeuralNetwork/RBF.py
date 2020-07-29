@@ -1,5 +1,5 @@
 from math import exp, sqrt
-
+import json
 from NeuralNetwork.NetworkInterface import NetworkInterface
 from Points import *
 
@@ -30,10 +30,20 @@ class Neuron:
     def output_for(self, p: Point):
         return self.error(p) / self.sigma
 
+    def to_json(self):
+        class Encoder(json.JSONEncoder):
+            def encode(self, obj: Neuron) -> str:
+                res = "{"
+                res += "\"id\": " + str(obj.id) + ", \"weight\": " + str(obj.weight) +\
+                    ", \"wX\": " + str(obj.wX) + ", \"wY\": " + str(obj.wY)
+                return (res + "}").lower()
+
+        return Encoder().encode(self)
+
 
 class RBF(NetworkInterface):
     def to_string(self) -> str:
-        structure = 'rbf\n{}'.format(self.neuron_sigma)
+        structure = 'RBF\n{}'.format(self.neuron_sigma)
         for neuron in self.hidden_neurons:
             structure += str(neuron) + '\n'
 
@@ -74,3 +84,23 @@ class RBF(NetworkInterface):
                 res.append(self.output_for_point(point))
 
             return res
+
+    def to_json(self):
+        class Encoder(json.JSONEncoder):
+            def encode(self, net: RBF) -> str:
+                res = "{"
+                res += "\"sigma\": " + str(net.neuron_sigma)
+                res += ", \"nodes\": ["
+                for node in net.hidden_neurons:
+                    res += node.to_json() + ", "
+                res = res[:-2]
+                return (res + "]}").lower()
+
+        return Encoder().encode(self)
+
+
+o = RBF(0.5)
+for i in range(50):
+    o.train([Point.Point(1, 0.3, 0.2)])
+
+print(o.to_json())

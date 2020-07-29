@@ -36,7 +36,10 @@ function getColor(color1, color2, position){
 function colorToString(RGB){
     let str = '#';
     for ( let i = 0; i < 3; i++){
-        str = str + RGB[i].toString();
+        let sRGB = RGB[i].toString();
+        if (sRGB.length === 1)
+            sRGB = '0'+sRGB;
+        str = str + sRGB;
     }
     return str;
 }

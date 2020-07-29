@@ -17,6 +17,7 @@ const ZERO = "#e6e6e6";
 //     todo обработка приходящих сообщений
 // };
 
+
 $(document).ready(function(){
     reloadDatasets();
     drawHeatMaps();
@@ -307,12 +308,12 @@ function createNetwork(data){
     if (data.startsWith('MLP'))
         network = new Mlp(data);
 
-    else if (data.startsWith("Rbf"))
+    else if (data.startsWith("RBF"))
         network = new Rbf(data);
 }
 
 function grabData() {
-    let shape = "1,1,1";
+    let shape = layers.join(',');
     let s_inputs = inputs.join(',');
     let net_type = document.getElementById("NNtype").value;
     let learn_rate = document.getElementById("myLearningRate").value;
@@ -507,5 +508,16 @@ function removeNeuron(rowId) {
         let child = document.getElementById(rowNum+'0'+(layers[rowNum]-1));
         child.parentNode.removeChild(child);
         layers[rowNum]--;
+    }
+}
+
+function changeNnTo(networkType){
+    if (networkType === 'rbf'){
+        let child = document.getElementById('features-column');
+        child.parentNode.removeChild(child);
+
+        child = document.getElementById('hidden-layers-column');
+        child.parentNode.removeChild(child);
+
     }
 }

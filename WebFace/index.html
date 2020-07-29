@@ -35,7 +35,7 @@
       <form id="inputs" action="http://localhost:8080" method="get" target="_self">
         <div class="horizontal_control">
           <label for="NNtype">Network type:</label><br/>
-          <select id="NNtype">
+          <select id="NNtype" onchange="changeNnTo(this.options[this.selectedIndex].value)">
             <option value="mlp">MultiLayer Perceptron</option>
             <option value="rbf">Radial-basis Function Network</option>
           </select>
@@ -107,7 +107,7 @@
   <div id="main-part" class="l--page">
 
     <!--  Data Column-->
-    <div class="column data">
+    <div id="data-column" class="column data">
       <h4>
         <span>Data</span>
       </h4>
@@ -149,7 +149,7 @@
     </div>
 
     <!-- Features Column -->
-    <div class="column features">
+    <div id="features-column" class="column features">
       <h4>Features</h4>
       <p>Which properties do you want to feed in?</p>
       <div id="network">
@@ -187,7 +187,7 @@
     </div>
 
     <!-- Hidden Layers Column -->
-    <div class="column hidden-layers">
+    <div id="hidden-layers-column" class="column hidden-layers">
       <h4>
         <div class="ui-numHiddenLayers">
           <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="addLayer()">
@@ -281,7 +281,7 @@
         </div>
       </div>
     </div>
-
   </div>
+
 </body>
 </html>

@@ -23,12 +23,11 @@ class Learner(Thread):
 
 
 class RequestHandler(BaseHTTPRequestHandler):
-    generator = None
-    network = None
-
     def __init__(self, request, client_address, server):
         super().__init__(request, client_address, server)
         self.learn_thread = Learner(self)
+        self.generator = None
+        self.network = None
 
     def _send_cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -205,7 +204,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_error(500, 'unknown params', 'unknown {} param for \'update\' command'.format(entity))
 
     def do_get_points(self):
-
         if self.generator is None or self.generator.type() != self.parameters[1]:
             shape = self.parameters[1]
             if shape == 'circle':
@@ -231,6 +229,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+
     httpd = HTTPServer((HOST, PORT), RequestHandler)
     print('server started at', HOST, PORT)
     httpd.serve_forever()
