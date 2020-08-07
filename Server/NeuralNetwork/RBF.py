@@ -68,7 +68,7 @@ class RBF(NetworkInterface):
     def output_for_point(self, p: Point):
         sum_ = 0.
         for neuron in self.hidden_neurons:
-            sum_ += neuron.error(p) * neuron.weight
+            sum_ += neuron.output_for(p) * neuron.weight
         return sum_
 
     def train(self, points: list):
@@ -97,10 +97,3 @@ class RBF(NetworkInterface):
                 return (res + "]}").lower()
 
         return Encoder().encode(self)
-
-
-o = RBF(0.5)
-for i in range(50):
-    o.train([Point.Point(1, 0.3, 0.2)])
-
-print(o.to_json())

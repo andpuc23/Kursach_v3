@@ -27,7 +27,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         super().__init__(request, client_address, server)
         self.learn_thread = Learner(self)
         self.generator = None
-        self.network = None
+        self.networks = []
+        self.__id = 0
 
     def _send_cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -37,28 +38,23 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'DNT,X-CustomHeader,Keep-Alive,'
                                                          'User-Agent,X-Requested-With,If-Modified-Since,'
                                                          'Cache-Control,Content-Type')
-        # self.send_header("Connection", "Upgrade")
-        # self.send_header("Sec_WebSocket-Accept")
         self.end_headers()
 
     def parse_request(self):
-        self.requestline = self.raw_requestline[6:-11]
+        # get /styles http/1.1 \r\n
+        if self.raw_requestline[0:4] == b'POST':
+            self.requestline = self.raw_requestline[6:-11]
+            self.command = "POST"
+        else: # raw_requestline[0:3] == b'GET'
+            self.requestline = self.raw_requestline[5:-11]
+            self.command = "GET"
         print('request:', self.requestline)
         self.request_version = "HTTP/1.1"
 
-        index = len("Request=")
-        request = self.requestline[index:].decode('utf-8')
+        request = self.requestline.decode('utf-8')
 
-        self.command = request.split("%20")[0]
-        self.parameters = request.split("%20")[1:]
-
-        if any(start in self.command for start in ['get_points', 'train', 'create_network', 'update', 'send_header']):
-            print("command:", self.command)
-            print("parameters:", self.parameters)
-            return True
-        print("No command {} found".format(self.command))
-        self.send_error(501, "internal error", "No command {}".format(self.command))
-        return False
+        self.parameters = request.split(" ")
+        return True
 
     def _init_generator(self, gen_type, parameters):
         if gen_type == 'circle':
@@ -121,21 +117,22 @@ class RequestHandler(BaseHTTPRequestHandler):
             for inp in parameters[5].split('%2C'):
                 if inp in possible_ids:
                     input_ids.append(inp)
-            self.network = MLP.MLP(layer_sizes,
+            self.networks.append( MLP.MLP(layer_sizes,
                                    activation,
                                    Activations.LINEAR,
                                    learn_rate,
                                    regularization_rate,
                                    regularization,
                                    input_ids)
+            )
             print('inited network')
-            return self.network.to_string()
+            return self.networks[self.__id].to_json()
 
         elif net_type == 'rbf':
             sigma = float(parameters[0])
-            self.network = RBF.RBF(sigma)
+            self.networks.append(RBF.RBF(sigma))
             print('inited network')
-            return self.network.to_string()
+            return self.networks[self.__id].to_json()
 
         else:
             self.send_error(500, "value error", "unknown network type")
@@ -147,7 +144,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print('sent', message)
 
     def check_entities(self):
-        if self.network is None:
+        if not self.networks:
             self.send_error(412, 'No network', 'Neural network is not inited')
             return False
         if self.generator is None:
@@ -156,40 +153,68 @@ class RequestHandler(BaseHTTPRequestHandler):
         return True
 
     """
-    REQUEST FORMAT
-    get_points <number> <shape>
-    train <period>
-    create_network <type> <parameters>
-    update <what to update>
-
-    period = once/forever/stop
-    shape = circle/xor/cluster/spiral
-    what to update = network/points
-
-    EXAMPLES:
-    get_points 10 circle 75 100 125 - circle radius, ring radiuses
-    get_points 15 spiral 2 - coeff
-    get_points 27 xor 100 - size
-    get_points 13 cluster 50 50 -50 -50 75 - (x1, y1), (x2, y2), size
-
-    create_network mlp 4,2,5 relu 0.03 0 L1 X,Y,X2,sY - shape
-    create_network rbf 0.237
-
-    sends result of the actions
-    # todo дописать док
+    GET
+        пустой - ответ: index.html
+        styles.css - ответ: файл
+        ...
+    POST
+        init - получить параметры сети, создать сеть, одна эпоха обучения, вернуть сеть и id сети
+        get_values - получить id cети, сверяем с текущей сетью, если совпадают - 1 эпоха, вернуть сеть. Иначе - вернуть ошибку
+        reset - получить id, по нему удалить нейросеть
     """
+    def send_file(self, file):
+        try:
+            with open("../WebFace/" + file, 'r') as f:
+                self.send_results(f.read().encode('utf-8'))
+        except IOError as e:
+            print(e)
+            self.send_error(404, "page not found")
 
-    def do_train(self):
-        if self.check_entities():
-            if self.parameters[0] == 'once':
-                result = self.network.train(self.generator.get_point())
-                self.send_results(result)
-            elif self.parameters[0] == 'forever':
-                self.learn_thread.run()
-            elif self.parameters[0] == 'stop':
-                self.learn_thread.join()
-            else:
-                self.send_error(500, "unknown command", "unknown parameter for command \'learn\'")
+    def do_GET(self):
+        if self.parameters == ['']:
+            self.send_file('index.html')
+            return
+
+        if self.parameters[0][-3:] == 'css':
+            self.send_file(self.parameters[0])
+            return
+
+        if self.parameters[0][-2:] == 'js':
+            self.send_file(self.parameters[0])
+            return
+
+        if self.parameters[0] == 'favicon.ico':
+            self.send_file('favicon.ico')
+            return
+
+        else:
+            self.send_error(501, "not implemented")
+            return
+
+    def do_POST(self):
+        if self.parameters[0] == "init":
+            self._init_network(self.parameters[1], self.parameters[2:])
+            self.networks[self.__id].train()
+
+            self.send_results(self.networks[self.__id].to_json().encode('utf-8'))
+            self.send_results(self.__id)
+            self.__id += 1
+
+        elif self.parameters[0] == "get_values":
+            id = int(self.parameters[1])
+            if id > self.__id:
+                self.send_error(500, "wrong network id")
+                return
+            self.networks[id].train()
+            self.send_results(self.networks[self.__id].to_json().encode('utf-8'))
+            # self.send_results(id)  # - если надо возвращать id, эта строчка тоже нужна
+        elif self.parameters[0] == "reset":
+            id = int(self.parameters[1])
+            if id > self.__id:
+                self.send_error(500, "wrong network id")
+                return
+            self.networks.pop(id)
+            self.send_results("network was deleted".encode('utf-8'))
 
     def do_update(self):
         entity = self.parameters[0]
@@ -229,7 +254,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-
     httpd = HTTPServer((HOST, PORT), RequestHandler)
     print('server started at', HOST, PORT)
     httpd.serve_forever()

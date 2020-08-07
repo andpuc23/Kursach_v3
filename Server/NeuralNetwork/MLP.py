@@ -398,7 +398,3 @@ class MLP(NetworkInterface):
                 return (res + "]}").lower()
 
         return Encoder().encode(self)
-
-
-o = MLP((1, 2), Activations.TANH(), Activations.LINEAR(), 0.1, 0, Regularizations.L1(), [1, 2, 3])
-print(o.to_json())
