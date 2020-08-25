@@ -71,9 +71,12 @@ class RBF(NetworkInterface):
             sum_ += neuron.output_for(p) * neuron.weight
         return sum_
 
-    def train(self, points: list):
-        for point in points:
-            self.add_neuron(point)
+    def train(self, points):
+        if isinstance(points, list):
+            for point in points:
+                self.add_neuron(point)
+        else:
+            self.add_neuron(points)
 
     def predict(self, point=None, points=None):
         if points is None:

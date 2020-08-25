@@ -1,3 +1,5 @@
+import http.client
+import json
 from threading import Thread
 from NeuralNetwork import MLP, NetworkInterface, RBF
 from NeuralNetwork.MLP import Activations, Regularizations
@@ -5,10 +7,13 @@ from Points import PointsGenerator
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+
 HOST = '127.0.0.1'
 PORT = 8080
 MAX_LINE = 64*1024
 
+networks = []
+generator = None
 
 class Learner(Thread):
     def __init__(self,  callback, network: NetworkInterface = None, batch_size=1):
@@ -23,12 +28,10 @@ class Learner(Thread):
 
 
 class RequestHandler(BaseHTTPRequestHandler):
+    __id = 0
+
     def __init__(self, request, client_address, server):
         super().__init__(request, client_address, server)
-        self.learn_thread = Learner(self)
-        self.generator = None
-        self.networks = []
-        self.__id = 0
 
     def _send_cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -42,6 +45,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def parse_request(self):
         # get /styles http/1.1 \r\n
+        self.request_version = 'HTTP/1.1'
         if self.raw_requestline[0:4] == b'POST':
             self.requestline = self.raw_requestline[6:-11]
             self.command = "POST"
@@ -49,9 +53,9 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.requestline = self.raw_requestline[5:-11]
             self.command = "GET"
         print('request:', self.requestline)
-        self.request_version = "HTTP/1.1"
 
         request = self.requestline.decode('utf-8')
+        self.headers = http.client.parse_headers(self.rfile, _class=self.MessageClass)
 
         self.parameters = request.split(" ")
         return True
@@ -87,8 +91,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def _init_network(self, net_type, parameters):
         if net_type == 'mlp':
             # layer sizes
-            layer_sizes = tuple(
-                map(lambda a: int(a), parameters[0].split('%2C')))
+            layer_sizes = tuple(parameters[0])
             # activation function
             activation = None
             if parameters[1] in ['identity', 'relu', 'logistic', 'tanh']:
@@ -112,27 +115,22 @@ class RequestHandler(BaseHTTPRequestHandler):
                     regularization = Regularizations.L1
                 else:
                     regularization = Regularizations.L2
-            input_ids = []
-            possible_ids = ['X', 'Y', "X2", "Y2", "XY", "sX", "sY"]
-            for inp in parameters[5].split('%2C'):
-                if inp in possible_ids:
-                    input_ids.append(inp)
-            self.networks.append( MLP.MLP(layer_sizes,
-                                   activation,
-                                   Activations.LINEAR,
-                                   learn_rate,
-                                   regularization_rate,
-                                   regularization,
-                                   input_ids)
-            )
+            input_ids = parameters[5]
+            networks.append(MLP.MLP(layer_sizes,
+                                        activation,
+                                        Activations.LINEAR,
+                                        learn_rate,
+                                        regularization_rate,
+                                        regularization,
+                                        input_ids))
             print('inited network')
-            return self.networks[self.__id].to_json()
+            return networks[self.__id].to_json()
 
         elif net_type == 'rbf':
-            sigma = float(parameters[0])
-            self.networks.append(RBF.RBF(sigma))
+            sigma = float(parameters)
+            networks.append(RBF.RBF(sigma))
             print('inited network')
-            return self.networks[self.__id].to_json()
+            return networks[self.__id].to_json()
 
         else:
             self.send_error(500, "value error", "unknown network type")
@@ -141,13 +139,20 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_response(200, message)
         self._send_cors_headers()
         self.wfile.write(message)
-        print('sent', message)
+        try:
+            message = message.decode('utf-8')
+        except Exception:
+            print("exception while decoding")
+        if len(message) > 100:
+            print('sent', message[0:100])
+        else:
+            print('sent' + message)
 
     def check_entities(self):
-        if not self.networks:
+        if not networks:
             self.send_error(412, 'No network', 'Neural network is not inited')
             return False
-        if self.generator is None:
+        if generator is None:
             self.send_error(412, 'No points', 'Points generator type is not selected')
             return False
         return True
@@ -191,66 +196,85 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_error(501, "not implemented")
             return
 
+        # one user can generate only 1 network of each type todo
     def do_POST(self):
-        if self.parameters[0] == "init":
-            self._init_network(self.parameters[1], self.parameters[2:])
-            self.networks[self.__id].train()
+        content_length = int(self.headers['content-length'])
 
-            self.send_results(self.networks[self.__id].to_json().encode('utf-8'))
-            self.send_results(self.__id)
+        post_body = self.rfile.read(content_length).decode('utf-8')
+        self.parameters = json.loads(post_body)
+
+        if "init" in self.requestline.decode('utf-8'):
+            if "datasetName" in self.parameters.keys():
+                if self.parameters["datasetName"] == 'classifyCircleData':
+                    generator = PointsGenerator.CirclePoints()
+                elif self.parameters["datasetName"] == 'classifySpiralData':
+                    generator = PointsGenerator.SpiralsPoints()
+                elif self.parameters['datasetName'] == 'classifyTwoGaussData':
+                    generator = PointsGenerator.ClusterPoints()
+                elif self.parameters['datasetName'] == 'classifyXORData':
+                    generator = PointsGenerator.XorPoints()
+                else:
+                    self.send_error(500, 'wrong params', 'dataset name or params can\'t be parsed')
+
+            if 'sigma' in self.parameters.keys():
+                self._init_network('rbf', self.parameters['sigma'])
+
+            elif 'learningRate' in self.parameters.keys():
+                inputs = []
+                if self.parameters['x']:
+                    inputs.append('X')
+                if self.parameters['y']:
+                    inputs.append('Y')
+                if self.parameters['xTimesY']:
+                    inputs.append('XY')
+                if self.parameters['xSquared']:
+                    inputs.append('X2')
+                if self.parameters['ySquared']:
+                    inputs.append('Y2')
+                if self.parameters['sinX']:
+                    inputs.append('sX')
+                if self.parameters['sinY']:
+                    inputs.append('sY')
+
+                self._init_network('mlp', [[len(inputs)] + self.parameters['networkShape'] + [1],
+                                           self.parameters['activation'], self.parameters['learningRate'],
+                                           self.parameters['regularizationRate'],
+                                           self.parameters['regularization'], inputs])
+
+                networks[self.__id].train(generator.get_point())
+
+            self.send_results((networks[self.__id].to_json() + '\n' + str(self.__id)).encode('utf-8'))
             self.__id += 1
 
-        elif self.parameters[0] == "get_values":
-            id = int(self.parameters[1])
+        elif "get_values" in self.requestline.decode('utf-8'):
+            id = int(self.parameters['id'])
             if id > self.__id:
                 self.send_error(500, "wrong network id")
                 return
-            self.networks[id].train()
-            self.send_results(self.networks[self.__id].to_json().encode('utf-8'))
+
+            if "datasetName" in self.parameters.keys():
+                if self.parameters["datasetName"] == 'classifyCircleData':
+                    generator = PointsGenerator.CirclePoints()
+                elif self.parameters["datasetName"] == 'classifySpiralData':
+                    generator = PointsGenerator.SpiralsPoints()
+                elif self.parameters['datasetName'] == 'classifyTwoGaussData':
+                    generator = PointsGenerator.ClusterPoints()
+                elif self.parameters['datasetName'] == 'classifyXORData':
+                    generator = PointsGenerator.XorPoints()
+                else:
+                    self.send_error(500, 'wrong params', 'dataset name or params can\'t be parsed')
+
+            networks[id].train(generator.get_point())
+            self.send_results(networks[self.__id].to_json().encode('utf-8'))
             # self.send_results(id)  # - если надо возвращать id, эта строчка тоже нужна
-        elif self.parameters[0] == "reset":
-            id = int(self.parameters[1])
+
+        elif "reset" in self.requestline.decode('utf-8'):
+            id = int(self.parameters['id'])
             if id > self.__id:
                 self.send_error(500, "wrong network id")
                 return
-            self.networks.pop(id)
+            networks.pop(id)
             self.send_results("network was deleted".encode('utf-8'))
-
-    def do_update(self):
-        entity = self.parameters[0]
-        shape = self.parameters[1:]
-        if entity == 'points':
-            result = self._init_generator(shape[0], shape[1:]).encode('utf-8')
-            self.send_results(result)
-        elif entity == 'network':
-            result = self._init_network(shape[0], shape[1:]).encode('utf-8')
-            self.send_results(result)
-        else:
-            self.send_error(500, 'unknown params', 'unknown {} param for \'update\' command'.format(entity))
-
-    def do_get_points(self):
-        if self.generator is None or self.generator.type() != self.parameters[1]:
-            shape = self.parameters[1]
-            if shape == 'circle':
-                params = [50, 75, 100]
-            elif shape == 'xor':
-                params = [100]
-            elif shape == 'spiral':
-                params = [2]
-            else:  # shape == 'cluster'
-                params = [50, 50, -50, -50, 75]
-            self._init_generator(shape, params)
-
-        number = int(self.parameters[0])
-        points = []
-        for i in range(number):
-            points.append(self.generator.get_point())
-
-        response = ''
-        for point in points:
-            response += str(point)
-
-        self.send_results(response.encode('utf-8'))
 
 
 if __name__ == '__main__':

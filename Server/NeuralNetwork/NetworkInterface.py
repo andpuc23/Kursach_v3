@@ -14,7 +14,7 @@ class NetworkInterface(ABC):
         pass
 
     @abstractmethod
-    def to_string(self) -> str: pass
+    def __str__(self) -> str: pass
 
     def results(self):
         sz = PointsGenerator.POINTS_SIZE

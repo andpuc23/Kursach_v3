@@ -2,7 +2,7 @@ from math import pi
 from numpy.random import random_sample, randint
 from Points.Point import Point
 
-POINTS_SIZE = 100  # size of the points' field
+POINTS_SIZE = 6  # size of the points' field
 
 
 class Generator:
@@ -20,12 +20,12 @@ class Generator:
 
 
 class SpiralsPoints(Generator):
-    def __init__(self, coeff: float):
+    def __init__(self, coeff=2.0):
         self.coeff = coeff
         self.generate_first = True
 
     def get_point(self):
-        k = randint(0, POINTS_SIZE)
+        k = randint(0, 2*POINTS_SIZE)
         ro = k * .75
         phi = ro * self.coeff
 
@@ -40,7 +40,9 @@ class SpiralsPoints(Generator):
 
 
 class ClusterPoints(Generator):
-    def __init__(self, xy1: (int, int), xy2: (int, int), size):
+    def __init__(self, xy1=(-POINTS_SIZE*2/3, -POINTS_SIZE*2/3),
+                 xy2=(POINTS_SIZE*2/3, POINTS_SIZE*2/3),
+                 size=POINTS_SIZE/2):
         self.center1 = xy1
         self.center2 = xy2
         self.size = size
@@ -83,8 +85,8 @@ class XorPoints(Generator):
 
 
 class CirclePoints(Generator):
-    def __init__(self, circle_radius,
-                 ring_inner, ring_outer):
+    def __init__(self, circle_radius=POINTS_SIZE*0.4,
+                 ring_inner=POINTS_SIZE*0.7, ring_outer=POINTS_SIZE*0.9):
         self.circle_radius = circle_radius
         self.inner_radius = ring_inner
         self.outer_radius = ring_outer
