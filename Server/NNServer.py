@@ -12,26 +12,14 @@ HOST = '127.0.0.1'
 PORT = 8080
 MAX_LINE = 64*1024
 
-networks = []
+networks = {} # id->network
 generator = None
-
-class Learner(Thread):
-    def __init__(self,  callback, network: NetworkInterface = None, batch_size=1):
-        super().__init__()
-        self.network = network
-        self.batch_size = batch_size
-        self.callback = callback
-
-    def run(self):
-        while True:
-            self.callback.send_results(200, self.network.train(self.batch_size))
 
 
 class RequestHandler(BaseHTTPRequestHandler):
-    __id = 0
-
     def __init__(self, request, client_address, server):
         super().__init__(request, client_address, server)
+
 
     def _send_cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -89,6 +77,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             raise ValueError("unknown points generator type")
 
     def _init_network(self, net_type, parameters):
+        __id = generate_id(networks)
         if net_type == 'mlp':
             # layer sizes
             layer_sizes = tuple(parameters[0])
@@ -116,21 +105,19 @@ class RequestHandler(BaseHTTPRequestHandler):
                 else:
                     regularization = Regularizations.L2
             input_ids = parameters[5]
-            networks.append(MLP.MLP(layer_sizes,
-                                        activation,
-                                        Activations.LINEAR,
-                                        learn_rate,
-                                        regularization_rate,
-                                        regularization,
-                                        input_ids))
+            net = MLP.MLP(layer_sizes, activation,
+                          Activations.LINEAR, learn_rate,
+                          regularization_rate, regularization, input_ids)
+            networks[__id] = net
             print('inited network')
-            return networks[self.__id].to_json()
+            return __id
 
         elif net_type == 'rbf':
             sigma = float(parameters)
-            networks.append(RBF.RBF(sigma))
+            net = RBF.RBF(sigma)
+            networks[__id] = net
             print('inited network')
-            return networks[self.__id].to_json()
+            return __id
 
         else:
             self.send_error(500, "value error", "unknown network type")
@@ -143,8 +130,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             message = message.decode('utf-8')
         except Exception:
             print("exception while decoding")
-        if len(message) > 100:
-            print('sent', message[0:100])
+        if len(message) > 200:
+            print('sent', message[0:200])
         else:
             print('sent' + message)
 
@@ -217,7 +204,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.send_error(500, 'wrong params', 'dataset name or params can\'t be parsed')
 
             if 'sigma' in self.parameters.keys():
-                self._init_network('rbf', self.parameters['sigma'])
+                new_net_id = self._init_network('rbf', self.parameters['sigma'])
 
             elif 'learningRate' in self.parameters.keys():
                 inputs = []
@@ -236,19 +223,19 @@ class RequestHandler(BaseHTTPRequestHandler):
                 if self.parameters['sinY']:
                     inputs.append('sY')
 
-                self._init_network('mlp', [[len(inputs)] + self.parameters['networkShape'] + [1],
+                new_net_id = self._init_network('mlp', [[len(inputs)] + self.parameters['networkShape'] + [1],
                                            self.parameters['activation'], self.parameters['learningRate'],
                                            self.parameters['regularizationRate'],
                                            self.parameters['regularization'], inputs])
 
-                networks[self.__id].train(generator.get_point())
+                networks[new_net_id].train(generator.get_point())
 
-            self.send_results((networks[self.__id].to_json() + '\n' + str(self.__id)).encode('utf-8'))
-            self.__id += 1
+            self.send_results((networks[new_net_id].to_json() + '\n' + str(new_net_id)).encode('utf-8'))
+
 
         elif "get_values" in self.requestline.decode('utf-8'):
-            id = int(self.parameters['id'])
-            if id > self.__id:
+            net_id = int(self.parameters['id'])
+            if net_id not in networks.keys():
                 self.send_error(500, "wrong network id")
                 return
 
@@ -264,17 +251,23 @@ class RequestHandler(BaseHTTPRequestHandler):
                 else:
                     self.send_error(500, 'wrong params', 'dataset name or params can\'t be parsed')
 
-            networks[id].train(generator.get_point())
-            self.send_results(networks[self.__id].to_json().encode('utf-8'))
+            networks[net_id].train(generator.get_point())
+            self.send_results(networks[net_id].to_json().encode('utf-8'))
             # self.send_results(id)  # - если надо возвращать id, эта строчка тоже нужна
 
         elif "reset" in self.requestline.decode('utf-8'):
-            id = int(self.parameters['id'])
-            if id > self.__id:
+            net_id = int(self.parameters['id'])
+            if net_id not in networks.keys():
                 self.send_error(500, "wrong network id")
                 return
-            networks.pop(id)
+            del networks[net_id]
             self.send_results("network was deleted".encode('utf-8'))
+
+
+def generate_id(dictionary: dict):
+    for i in range(10050000000):
+        if i not in dictionary.keys():
+            return i
 
 
 if __name__ == '__main__':
