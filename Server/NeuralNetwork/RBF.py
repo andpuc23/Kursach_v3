@@ -88,7 +88,7 @@ class RBF(NetworkInterface):
 
             return res
 
-    def to_json(self):
+    def to_full_json(self):
         class Encoder(json.JSONEncoder):
             def encode(self, net: RBF) -> str:
                 res = "{"
@@ -97,6 +97,16 @@ class RBF(NetworkInterface):
                 for node in net.hidden_neurons:
                     res += node.to_json() + ", "
                 res = res[:-2]
+                return (res + "]}").lower()
+
+        return Encoder().encode(self)
+
+    def to_json(self):
+        class Encoder(json.JSONEncoder):
+            def encode(self, net: RBF) -> str:
+                res = "{"
+                res += "\"last_node\": "
+                res += net.hidden_neurons[-1].to_json()
                 return (res + "]}").lower()
 
         return Encoder().encode(self)

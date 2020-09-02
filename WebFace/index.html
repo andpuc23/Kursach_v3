@@ -1,85 +1,133 @@
 <!doctype html>
-<html lang="en">
-<head>
+<html>
+<head lang="en">
   <meta charset="utf-8">
   <meta name="viewport" content="width=1024">
-
-  <title>A Neural Network Playground</title>
-  <link rel="stylesheet" href="styles.css" type="text/css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <title>Semester project</title>
+  <link rel="stylesheet" href="./styles/bundle.css" type="text/css">
+  <link rel="stylesheet" href="./styles/styles.css" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Material+Icons" rel="stylesheet" type="text/css">
-
-  <script src="scripts/networks.js"></script>
-  <script type="text/javascript" src="scripts/scripts.js"></script>
-  <script type="text/javascript" src="scripts/utilities.js"></script>
+  
+  <!-- Наши библиотеки -->
+  <script src="./scripts/lib.js"></script>
+  <!-- d3 version 5 d3_5-->
+  <script src="./scripts/d3.js"></script>
+  <!-- d3 version 3 -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  
+  <script src="./scripts/request.js"></script>
 </head>
 <body>
+
   <!-- Top Controls -->
   <div id="top-controls">
-    <div class="container l--page">
+    <!-- РАБОТАЕМ С MLP -->
+    <div id="MLP_top" class="container l--page">
+      <ul id="chooseNetwork">
+        <li><hr class="hr-inclined-right"><button id="mlp" class="selectedNetwork">MLP</button></li><hr class="hr-inclined-right">
+        <li><button id="rbf">RBF</button></li><hr class="hr-inclined-right">
+        <li><button id="cmac">CMAC</button></li><hr class="hr-inclined-right">
+      </ul>
       <div class="timeline-controls">
-        <button class="ui-resetButton ui-button"
-                id="reset-button" title="Rebuild the network" onclick="sendReset()">
-          <i class="material-icons">cached</i>
+        <button class="mdl-button mdl-js-button mdl-button--icon ui-resetButton" id="reset-button" title="Reset the network">
+        <i class="material-icons">replay</i>
         </button>
-        <button class="ui-playButton"
-                id="play-pause-button" title="Run/Pause" onclick="startStop()">
-          <i class="material-icons">play_arrow</i>
-          <i class="material-icons">pause</i>
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored ui-playButton" id="play-pause-button" title="Run/Pause">
+        <i class="material-icons">play_arrow</i>
+        <i class="material-icons">pause</i>
         </button>
-        <button class="ui-stepButton ui-button"
-                id="next-step-button" title="Step" onclick="doStep()">
-          <i class="material-icons">skip_next</i>
+        <button class="mdl-button mdl-js-button mdl-button--icon ui-stepButton" id="next-step-button" title="Step">
+        <i class="material-icons">skip_next</i>
         </button>
       </div>
-      <form id="inputs" action="http://localhost:8080" method="get" target="_self">
-        <div class="horizontal_control">
-          <label for="NNtype">Network type:</label><br/>
-          <select id="NNtype" onchange="changeNnTo(this.options[this.selectedIndex].value)">
-            <option value="mlp">MultiLayer Perceptron</option>
-            <option value="rbf">Radial-basis Function Network</option>
-          </select>
+      <div class="control">
+        <div> 
+          <span class="label">Epoch</span>
+          <!-- <span class="value" id="iter-number"></span> -->
+          <span  id="iter-number"></span>
         </div>
-
-        <div class="horizontal_control">
-          <label for="myLearningRate">Learning rate:</label><br/>
-          <select id="myLearningRate">
-            <option value="0.00001">0.00001</option>
-            <option value="0.0001">0.0001</option>
-            <option value="0.001">0.001</option>
-            <option value="0.003">0.003</option>
-            <option value="0.01">0.01</option>
-            <option value="0.03">0.03</option>
-            <option value="0.1">0.1</option>
-            <option value="0.3">0.3</option>
-            <option value="1">1</option>
-            <option value="3">3</option>
-            <option value="10">10</option>
-          </select>
+        <div class="whichset"> 
+          <span class="value">Which dataset do you want to use?</span>
         </div>
-
-        <div class="horizontal_control">
-          <label for="myActivations">Activation function:</label><br/>
-          <select id="myActivations">
-            <option value="relu">RELU</option>
+      </div>
+      <div class="control ui-learningRate">
+      <label for="learningRate">Learning rate</label>
+      <div class="select">
+        <select id="learningRate">
+          <option value="0.00001">0.00001</option>
+          <option value="0.0001">0.0001</option>
+          <option value="0.001">0.001</option>
+          <option value="0.003">0.003</option>
+          <option value="0.01">0.01</option>
+          <option value="0.03">0.03</option>
+          <option value="0.1">0.1</option>
+          <option value="0.3">0.3</option>
+          <option value="1">1</option>
+          <option value="3">3</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+      <div class="ui-dataset">
+        <div class="dataset-list">
+          <div class="dataset" title="Circle">
+            <canvas class="data-thumbnail" data-dataset="circle"></canvas>
+          </div>
+          <div class="dataset" title="Exclusive or">
+            <canvas class="data-thumbnail" data-dataset="xor"></canvas>
+          </div>
+          <div class="dataset" title="Gaussian">
+            <canvas class="data-thumbnail" data-dataset="gauss"></canvas>
+          </div>
+          <div class="dataset" title="Spiral">
+            <canvas class="data-thumbnail" data-dataset="spiral"></canvas>
+          </div>
+          <div class="dataset" title="Plane">
+            <canvas class="data-thumbnail" data-regDataset="reg-plane"></canvas>
+          </div>
+          <div class="dataset" title="Multi gaussian">
+            <canvas class="data-thumbnail" data-regDataset="reg-gauss"></canvas>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="control ui-activation">
+        <label for="activations">Activation</label>
+        <div class="select">
+          <select id="activations">
+            <option value="relu">ReLU</option>
             <option value="tanh">Tanh</option>
             <option value="sigmoid">Sigmoid</option>
             <option value="linear">Linear</option>
           </select>
         </div>
-
-        <div class="horizontal_control">
-          <label for="myRegularizations">Regularization:</label><br/>
-          <select id="myRegularizations">
+      <div class="ui-percTrainData">
+        <label for="percTrainData">Ratio of training to test data:&nbsp;&nbsp;<span class="value">XX</span>%</label>
+        <p class="slider">
+          <input class="mdl-slider mdl-js-slider" type="range" id="percTrainData" min="10" max="90" step="10">
+        </p>
+      </div>
+      </div>
+      <div class="control ui-regularization">
+        <label for="regularizations">Regularization</label>
+        <div class="select">
+          <select id="regularizations">
             <option value="none">None</option>
             <option value="L1">L1</option>
             <option value="L2">L2</option>
           </select>
         </div>
-
-        <div class="horizontal_control">
-          <label for="myRegularizationRate">Regularization rate:</label><br/>
-          <select id="myRegularizationRate">
+      <div class="ui-noise">
+        <label for="noise">Noise:&nbsp;&nbsp;<span class="value">XX</span></label>
+        <p class="slider">
+          <input class="mdl-slider mdl-js-slider" type="range" id="noise" min="0" max="50" step="5">
+        </p>
+      </div>
+      </div>
+      <div class="control ui-regularizationRate">
+        <label for="regularRate">Regularization rate</label>
+        <div class="select">
+          <select id="regularRate">
+            <option value="0">0</option>
             <option value="0.001">0.001</option>
             <option value="0.003">0.003</option>
             <option value="0.01">0.01</option>
@@ -91,163 +139,179 @@
             <option value="10">10</option>
           </select>
         </div>
-
-        <div class="horizontal_control">
-          <label for="myProblem">Problem:</label><br/>
-          <select id="myProblem">
+        <div class="ui-batchSize">
+          <label for="batchSize">Batch size:&nbsp;&nbsp;<span class="value">XX</span></label>
+          <p class="slider">
+            <input class="mdl-slider mdl-js-slider" type="range" id="batchSize" min="1" max="30" step="1">
+          </p>
+        </div>
+      </div>
+      <div class="control ui-problem">
+      <label for="problem">Problem type</label>
+      <div class="select">
+        <select id="problem">
+          <option value="classification">Classification</option>
+          <option value="regression">Regression</option>
+        </select>
+      </div>
+      <button class="basic-button" id="data-regen-button" title="Regenerate data">
+        Regenerate
+      </button>
+      </div>
+    </div>
+    <!-- РАБОТАЕМ С RBF -->
+    <div id="RBF_top" class="container l--page" style="display:none;">
+      <ul id="chooseNetwork-RBF">
+        <li><hr class="hr-inclined-right"><button id="mlp">MLP</button></li><hr class="hr-inclined-right">
+        <li><button id="rbf" class="selectedNetwork">RBF</button></li><hr class="hr-inclined-right">
+        <li><button id="cmac">CMAC</button></li><hr class="hr-inclined-right">
+      </ul>
+      <div class="timeline-controls">
+        <button class="mdl-button mdl-js-button mdl-button--icon ui-resetButton" id="reset-button-RBF" title="Reset the network">
+          <i class="material-icons">replay</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored ui-playButton" id="play-pause-button-RBF" title="Run/Pause">
+          <i class="material-icons">play_arrow</i>
+          <i class="material-icons">pause</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon ui-stepButton" id="next-step-button-RBF" title="Step">
+          <i class="material-icons">skip_next</i>
+        </button>
+      </div>
+      <div class="control">
+        <div> 
+          <span class="label">Epoch</span>
+          <span id="iter-number-RBF"></span>
+        </div>
+      </div>
+      <!-- Здесь датасеты -->
+      <div class="control ui-learningRate">
+        <div class="whichset"> 
+          <span class="value">dataset</span>
+        </div>
+        <div class="dataset-list">
+          <div class="datasetRBF" title="Circle">
+            <canvas class="data-thumbnail" data-dataset-RBF="circle"></canvas>
+          </div>
+          <div class="datasetRBF" title="Exclusive or">
+            <canvas class="data-thumbnail" data-dataset-RBF="xor"></canvas>
+          </div>
+          <div class="datasetRBF" title="Gaussian">
+            <canvas class="data-thumbnail" data-dataset-RBF="gauss"></canvas>
+          </div>
+          <div class="datasetRBF" title="Spiral">
+            <canvas class="data-thumbnail" data-dataset-RBF="spiral"></canvas>
+           </div>
+           <div class="datasetRBF" title="Plane">
+            <canvas id="reg-plane-RBF" class="data-thumbnail" data-regDataset-RBF="reg-plane"></canvas>
+           </div>
+           <div class="datasetRBF" title="Multi gaussian">
+            <canvas id="reg-gauss-RBF" class="data-thumbnail" data-regDataset-RBF="reg-gauss"></canvas>
+           </div>
+        </div>
+      </div>
+      <!-- Здесь trainData -->
+      <div class="control ui-activation">
+        <div class="ui-percTrainData">
+          <label for="percTrainData" id="RBF">Ratio of training to test data:&nbsp;&nbsp;<span class="value" id="RBF">XX</span>%</label>
+          <p class="slider">
+            <input class="mdl-slider mdl-js-slider" type="range" id="percTrainData-RBF" min="10" max="90" step="10">
+          </p>
+        </div>
+      </div>
+      <!-- Здесь шумы -->
+      <div class="control ui-regularizationRate">
+        <div class="ui-noise">
+          <label for="noise" id="RBF">Noise:&nbsp;&nbsp;<span class="value" id="RBF">XX</span></label>
+          <p class="slider">
+            <input class="mdl-slider mdl-js-slider" type="range" id="noise-RBF" min="0" max="50" step="5">
+          </p>
+        </div>
+      </div>
+      <!-- Здесь сигма -->
+      <div class="control ui-regularization">
+        <div class="ui-sigma">
+          <label for="sigma">Sigma:&nbsp;&nbsp;<span class="value" id="RBF">XX</span></label>
+          <p class="slider">
+            <input class="mdl-slider mdl-js-slider" type="range" id="sigma-RBF" min="1" max="30" step="1">
+          </p>
+        </div>
+      </div>
+      <div class="control ui-problem">
+        <label for="problem">Problem type</label>
+        <div class="select">
+          <select id="problem-RBF">
             <option value="classification">Classification</option>
             <option value="regression">Regression</option>
           </select>
         </div>
-      </form>
+        <button class="basic-button" id="data-regen-button-RBF" title="Regenerate data">
+          Regenerate
+        </button>
+      </div>
     </div>
+    <!-- РАБОТАЕМ С CMAC -->
+
   </div>
-
+  
   <!-- Main Part -->
-  <div id="main-part" class="l--page">
+    <!-- MLP main -->
+  <div id="MLP_main">
+    <div class="bracket"></div>
+    <div id="main-part" class="l--page">
 
-    <!--  Data Column-->
-    <div id="data-column" class="column data">
-      <h4>
-        <span>Data</span>
-      </h4>
-      <div class="ui-dataset">
-        <p>Which dataset do you want to use?</p>
-        <div class="dataset-list">
-          <div class="dataset" title="Circle">
-            <canvas id="circle-dataset" class="data-thumbnail" onclick="selectDataset('circle')"></canvas>
+      <!-- Features Column -->
+      <div class="column features">
+        <h4>Features</h4>
+        <p>Which properties do you want to feed in?</p>
+        <div id="network">
+          <svg id="svg" width="510" height="450">
+            <defs>
+              <marker id="markerArrow" markerWidth="7" markerHeight="13" refX="1" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+                <path d="M2,11 L7,6 L2,2" />
+              </marker>
+            </defs>
+          </svg>
+          <!-- Hover card -->
+          <div id="hovercard">
+          <div style="font-size:10px">Click anywhere to edit.</div>
+          <div><span class="type">Weight/Bias</span> is <span class="value">0.2</span><span><input type="number"/></span>.</div>
           </div>
-          <div class="dataset" title="XOR">
-            <canvas id="xor-dataset" class="data-thumbnail" onclick="selectDataset('xor')"></canvas>
+          <div class="callout thumbnail">
           </div>
-          <div class="dataset" title="Gaussian">
-            <canvas id="cluster-dataset" class="data-thumbnail" onclick="selectDataset('cluster')"></canvas>
-          </div>
-          <div class="dataset" title="Spiral">
-            <canvas id="spiral-dataset" class="data-thumbnail" onclick="selectDataset('spiral')"></canvas>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="ui-noise">
-          <label for="noise">Noise:&nbsp;&nbsp;<span id="noise-label-value" class="value">15</span>%</label>
-          <p class="slider">
-            <input class="mdl-slider mdl-js-slider" type="range" id="noise" min="10" max="50" step="5" value="15" onchange="updateValue('noise-label-value', this.value)">
-          </p>
-        </div>
-        <div class="ui-batchSize">
-          <label for="batchSize">Batch size:&nbsp;&nbsp;<span id="batchSize-value" class="value">5</span></label>
-          <p class="slider">
-            <input class="mdl-slider mdl-js-slider" type="range" id="batchSize"  min="1" max="30" step="1" value="5"
-                   onchange="updateValue('batchSize-value', this.value)">
-          </p>
-        </div>
-          <button class="basic-button" id="data-regen-button" title="Regenerate data" onclick="reloadDatasets()">
-            Regenerate
-          </button>
-      </div>
-    </div>
-
-    <!-- Features Column -->
-    <div id="features-column" class="column features">
-      <h4>Features</h4>
-      <p>Which properties do you want to feed in?</p>
-      <div id="network">
-        <div class="feature-wrapper">
-            <tspan>X</tspan>
-            <canvas id="X-feature" class="feature input-feature" onclick="selectFeature(this.id)"></canvas>
-        </div>
-        <div class="feature-wrapper">
-            <tspan>Y</tspan>
-            <canvas id="Y-feature" class="feature input-feature" onclick="selectFeature(this.id)"></canvas>
-        </div>
-        <div class="feature-wrapper">
-            <tspan>X</tspan>
-            <tspan baseline-shift="super" style="font-size: 9px">2</tspan>
-            <canvas id="X2-feature" class="feature input-feature" onclick="selectFeature(this.id)"></canvas>
-        </div>
-        <div class="feature-wrapper">
-            <tspan>Y</tspan>
-            <tspan baseline-shift="super" style="font-size: 9px">2</tspan>
-            <canvas id="Y2-feature" class="feature input-feature" onclick="selectFeature(this.id)"></canvas>
-        </div>
-        <div class="feature-wrapper">
-            <p>XY</p>
-            <canvas id="XY-feature" class="feature input-feature" onclick="selectFeature(this.id)"></canvas>
-        </div>
-        <div class="feature-wrapper">
-            <p>sin(X)</p>
-            <canvas id="sX-feature" class="feature input-feature" onclick="selectFeature(this.id)"></canvas>
-        </div>
-        <div class="feature-wrapper">
-            <p>sin(Y)</p>
-            <canvas id="sY-feature" class="feature input-feature" onclick="selectFeature(this.id)"></canvas>
+          <div class="callout weights">
         </div>
       </div>
     </div>
 
     <!-- Hidden Layers Column -->
-    <div id="hidden-layers-column" class="column hidden-layers">
+    <div class="column hidden-layers">
       <h4>
         <div class="ui-numHiddenLayers">
-          <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="addLayer()">
+          <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">add</i>
           </button>
-          <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="removeLayer()">
+          <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">remove</i>
           </button>
         </div>
-        <span id="num-layers">2</span>
-        <p>hidden layers</p>
+        <span id="num-layers"></span>
+        <span id="layers-label"></span>
       </h4>
-      <div class="bracket"></div>
-
-
-      <div id="columns" style="border: 1px solid red; min-height: 20px; overflow: hidden">
-        <div class="layer-column" id="row-0">
-          <div class="neuron-buttons">
-            <button id="add-0" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="addNextNeuron('row-0')">
-              <i class="material-icons">add</i>
-            </button>
-            <button id="remove-0" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="removeNeuron('row-0')">
-              <i class="material-icons">remove</i>
-            </button>
-          </div>
-          <div class="neuron" id="000"></div>
-          <div class="neuron" id="001"></div>
-          <div class="neuron" id="002"></div>
-          <div class="neuron" id="003"></div>
-        </div>
-        <div class="layer-column" id="row-1">
-          <div class="neuron-buttons">
-            <button id="add-1" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="addNextNeuron('row-1')">
-              <i class="material-icons">add</i>
-            </button>
-            <button id="remove-1" class="mdl-button mdl-js-button mdl-button--icon layers-button" onclick="removeNeuron('row-1')">
-              <i class="material-icons">remove</i>
-            </button>
-            <div class="neuron" id="100"></div>
-            <div class="neuron" id="101"></div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Output Column -->
-    <div class="column output">
-      <h4>Output</h4>
-      <div class="metrics">
-        <div class="output-stats ui-percTrainData">
-          <span>Test loss</span>
-          <div class="value" id="loss-test"></div>
-        </div>
-        <div class="output-stats train">
-          <span>Training loss</span>
-          <div class="value" id="loss-train"></div>
-        </div>
-        <div id="linechart"></div>
-      </div>
-      <div id="heatmap"></div>
+     <div class="column output">
+      <!-- <div id="heatmap"></div> -->
+    </div>
+
+    </div>
+  </div>
+  
+    <!-- RBF main -->
+  <div id="RBF_main" style="display:none;">
+    <div id="main-part" class="l--page">
+      <div id="heatmap-RBF"></div>
       <div style="float:left;margin-top:20px">
         <div style="display:flex; align-items:center;">
 
@@ -255,33 +319,84 @@
           <div class="label" style="width:105px; margin-right: 10px">
             Colors shows data, neuron and weight values.
           </div>
-          <svg width="150" height="30" id="colormap">
+          <svg width="150" height="30" id="colormap-RBF">
             <defs>
-              <linearGradient id="gradient" x1="0%" y1="100%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ff0080" stop-opacity="1"></stop>
-                <stop offset="50%" stop-color="#e6e6e6" stop-opacity="1"></stop>
-                <stop offset="100%" stop-color="#00ff80" stop-opacity="1"></stop>
+              <linearGradient id="gradientRBF" x1="0%" y1="100%" x2="100%" y2="100%">
+                <stop offset="0%"   stop-color="#FF1493" stop-opacity="1"></stop>
+                <stop offset="50%"  stop-color="#e8eaeb" stop-opacity="1"></stop>
+                <stop offset="100%" stop-color="#00FA9A" stop-opacity="1"></stop>
               </linearGradient>
             </defs>
             <g class="core" transform="translate(3, 0)">
-              <rect width="144" height="10" style="fill: url('#gradient');"></rect>
+              <rect width="144" height="10" style="fill: url('#gradientRBF');"></rect>
             </g>
           </svg>
-        </div>
-        <br/>
-        <div style="display:flex;">
-          <label class="ui-showTestData mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="show-test-data">
-            <input type="checkbox" id="show-test-data" class="mdl-checkbox__input" checked>
-            <span class="mdl-checkbox__label label">Show test data</span>
-          </label>
-          <label class="ui-discretize mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="discretize">
-            <input type="checkbox" id="discretize" class="mdl-checkbox__input" checked>
-            <span class="mdl-checkbox__label label">Discretize output</span>
-          </label>
         </div>
       </div>
     </div>
   </div>
 
+    <!-- Output -->
+    <div id="bottom-output" class="page-center">
+      <div class="column output">
+        <h4>Output</h4>
+        <div class="metrics">
+          <div class="output-stats ui-percTrainData">
+            <span>Test loss</span>
+            <div class="value" id="loss-test"></div>
+          </div>
+          <div class="output-stats train">
+            <span>Training loss</span>
+            <div class="value" id="loss-train"></div>
+          </div>
+          <div id="linechart"></div>
+        </div>
+        <div id="heatmap"></div>
+        <div style="float:left;margin-top:20px">
+          <div style="display:flex; align-items:center;">
+
+            <!-- Gradient color scale -->
+            <div class="label" style="width:105px; margin-right: 10px">
+              Colors shows data, neuron and weight values.
+            </div>
+
+            <svg width="150" height="30" id="colormap">
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="100%" x2="100%" y2="100%">
+                  <stop offset="0%"   stop-color="#FF1493" stop-opacity="1"></stop>
+                  <stop offset="50%"  stop-color="#e8eaeb" stop-opacity="1"></stop>
+                  <stop offset="100%" stop-color="#00FA9A" stop-opacity="1"></stop>
+                </linearGradient>
+              </defs>
+              <g class="core" transform="translate(3, 0)">
+                <rect width="144" height="10" style="fill: url('#gradient');"></rect>
+              </g>
+            </svg>
+
+          </div>
+          <br/>
+          <div style="display:flex;">
+            <label class="ui-showTestData mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="show-test-data">
+              <input type="checkbox" id="show-test-data" class="mdl-checkbox__input" checked>
+              <span class="mdl-checkbox__label label">Show test data</span>
+            </label>
+            <label class="ui-discretize mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="discretize">
+              <input type="checkbox" id="discretize" class="mdl-checkbox__input" checked>
+              <span class="mdl-checkbox__label label">Discretize output</span>
+            </label>
+          </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- id="main-part" class="l--page" -->
+
+  <!-- MLP -->
+  <script defer src="./scripts/MLP.js"></script>
+  <script defer src="./scripts/bracket.js"></script>
+  <script defer src="./scripts/menu.js"></script> 
+  <!-- RBF -->
+  <script defer src="./scripts/RBF.js"></script>
 </body>
 </html>

@@ -179,19 +179,24 @@ class Node:
                 res = "{"
                 res += "\"id\": " + nod.id
                 res += ", \"bias\": " + str(nod.bias)
-                res += ", \"inputs\": ["
-
-                for link in nod.input_links:
-                    res += "{\"is_dead\":" + str(link.is_dead) + ", \"weight\": " + str(link.weight) + \
-                           ", \"id\": \"" + str(link.source.id + "-" + link.dest.id) + "\"},"
-                res = res[:-1]  # remove last ','
-                res += "], \"outputs\": ["
-
-                for link in nod.output_links:
-                    res += "{\"is_dead\":" + str(link.is_dead) + ", \"weight\": " + str(link.weight) + \
-                           ", \"id\": \"" + str(link.source.id + "-" + link.dest.id) + "\"},"
-
-                res = res[:-1]
+                res += ", \"inputs\": "
+                if nod.input_links:
+                    res += '['
+                    for link in nod.input_links:
+                        res += "{\"is_dead\":" + str(link.is_dead) + ", \"weight\": " + str(link.weight) + \
+                               ", \"id\": \"" + str(link.source.id + "-" + link.dest.id) + "\"},"
+                    res = res[:-1]  # remove last ','
+                    res += ']'
+                else:
+                    res += 'null'
+                res += ", \"outputs\": "
+                if nod.output_links:
+                    for link in nod.output_links:
+                        res += "{\"is_dead\":" + str(link.is_dead) + ", \"weight\": " + str(link.weight) + \
+                               ", \"id\": \"" + str(link.source.id + "-" + link.dest.id) + "\"},"
+                    res = res[:-1]
+                else:
+                    res += 'null'
                 return res + "]}"
 
         return Encoder().encode(self)

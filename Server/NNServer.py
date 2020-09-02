@@ -228,9 +228,12 @@ class RequestHandler(BaseHTTPRequestHandler):
                                            self.parameters['regularizationRate'],
                                            self.parameters['regularization'], inputs])
 
-                networks[new_net_id].train(generator.get_point())
+            networks[new_net_id].train(generator.get_point())
 
-            self.send_results((networks[new_net_id].to_json() + '\n' + str(new_net_id)).encode('utf-8'))
+            if networks[new_net_id] is RBF:
+                self.send_results((networks[new_net_id].to_full_json() + '\n' + str(new_net_id)).encode('utf-8'))
+            else:
+                self.send_results((networks[new_net_id].to_json() + '\n' + str(new_net_id)).encode('utf-8'))
 
 
         elif "get_values" in self.requestline.decode('utf-8'):
