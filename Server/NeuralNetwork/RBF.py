@@ -107,6 +107,6 @@ class RBF(NetworkInterface):
                 res = "{"
                 res += "\"last_node\": "
                 res += net.hidden_neurons[-1].to_json()
-                return (res + "]}").lower()
+                return (res + "}").lower()
 
         return Encoder().encode(self)

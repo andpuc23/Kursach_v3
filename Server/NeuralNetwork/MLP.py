@@ -167,10 +167,6 @@ class Node:
         return self.output
 
     def __str__(self):
-        """
-            returns string of format "node <self.id>; <self.bias>"
-            required for data transfer to client
-            """
         return "node id:{}; bias:{}".format(self.id, self.bias)
 
     def to_json(self):
@@ -191,13 +187,14 @@ class Node:
                     res += 'null'
                 res += ", \"outputs\": "
                 if nod.output_links:
+                    res += '['
                     for link in nod.output_links:
                         res += "{\"is_dead\":" + str(link.is_dead) + ", \"weight\": " + str(link.weight) + \
                                ", \"id\": \"" + str(link.source.id + "-" + link.dest.id) + "\"},"
-                    res = res[:-1]
+                    res = res[:-1] + ']'
                 else:
                     res += 'null'
-                return res + "]}"
+                return res + "}"
 
         return Encoder().encode(self)
 
@@ -255,6 +252,7 @@ class MLP(NetworkInterface):
                         link = Link(prev_node, node, regularization)
                         prev_node.output_links.append(link)
                         node.input_links.append(link)
+        self.number = 0
         # print(str(self))
 
     def forward_propagation(self, inputs: list) -> float:
@@ -318,7 +316,7 @@ class MLP(NetworkInterface):
 
                     new_link_weight = link.weight - learning_rate * regularization_rate * regul_der
 
-                    if link.regularization is Regularizations.L1 and link.weight * new_link_weight == 0:
+                    if link.regularization is Regularizations.L1 and link.weight * new_link_weight < 0:
                         link.weight = 0
                         link.is_dead = True
                     else:
@@ -351,6 +349,7 @@ class MLP(NetworkInterface):
         self.forward_propagation(self.construct_input(point.get_cartesian()))
         self.back_propagation(point.val, Errors.SQUARE)
         self.update_weights()
+        self.number += 1
 
         return str(self)
 
@@ -395,6 +394,7 @@ class MLP(NetworkInterface):
         class Encoder(json.JSONEncoder):
             def encode(self, net: MLP) -> str:
                 res = "{"
+                res += "\"number\": " + str(net.number) + ","
                 res += "\"shape\": " + json.dumps(net.shape)
                 res += ", \"learn_rate\": {}".format(net.learn_rate)
                 res += ", \"regularization_rate\": {}".format(net.regularization_rate)
