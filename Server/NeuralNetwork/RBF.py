@@ -8,7 +8,8 @@ class Neuron:
     def __init__(self,
                  id_: str,
                  sigma: float,
-                 x, y
+                 x: float,
+                 y: float
                  ):
         self.id = id_
         self.sigma = sigma

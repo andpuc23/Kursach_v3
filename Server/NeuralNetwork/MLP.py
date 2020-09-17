@@ -204,9 +204,6 @@ class Link:
     source: Node
     dest: Node
     is_dead: bool
-    error_der = 0
-    acc_error_der = 0
-    num_accumulated_ders = 0
     regularization: Regularizations
 
     def __init__(self, source: Node, dest: Node, regularization):
@@ -216,6 +213,9 @@ class Link:
         self.dest = dest
         self.regularization = regularization
         self.is_dead = False
+        self.error_der = 0
+        self.acc_error_der = 0
+        self.num_accumulated_ders = 0
 
     def __str__(self):
         """returns string of format "link <i-j>; <self.weight>"""
@@ -288,7 +288,7 @@ class MLP(NetworkInterface):
                     link.acc_error_der += link.error_der
                     link.num_accumulated_ders += 1
 
-            if layer_idx == 1:
+            if layer_idx == 0:
                 continue
 
             prev_layer = self.network[layer_idx - 1]
@@ -313,6 +313,8 @@ class MLP(NetworkInterface):
                     regul_der = link.regularization.der(link.weight) \
                         if link.regularization is not None \
                         else 0
+
+                    link.weight -= (learning_rate / link.num_accumulated_ders) * link.acc_error_der
 
                     new_link_weight = link.weight - learning_rate * regularization_rate * regul_der
 

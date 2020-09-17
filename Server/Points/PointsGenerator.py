@@ -2,11 +2,11 @@ from math import pi
 from numpy.random import random_sample, random
 from Points.Point import Point
 
-POINTS_SIZE = 6  # size of the points' field
+POINTS_SIZE = 6.0  # size of the points' field
 
 
 class Generator:
-    def get_point(self):
+    def get_point(self) -> float:
         pass
 
     def get_batch(self, size):
