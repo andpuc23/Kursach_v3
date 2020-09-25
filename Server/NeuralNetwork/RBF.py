@@ -56,6 +56,7 @@ class RBF(NetworkInterface):
                  neuron_sigma):
         self.neuron_sigma = neuron_sigma
         self.hidden_neurons = []
+        self.number = 0
 
     def add_neuron(self, point):
         neuron = Neuron(str(self.__curr_id), self.neuron_sigma, *point.get_cartesian())
@@ -65,6 +66,7 @@ class RBF(NetworkInterface):
         err = point.val - self.output_for_point(point)
 
         neuron.weight = err
+        self.number += 1
 
     def output_for_point(self, p: Point):
         sum_ = 0.

@@ -1278,12 +1278,8 @@ function drawNode(cx, cy, nodeId, isInput, container, node) {
     div.datum({ heatmap: nodeHeatMap, id: nodeId });
 }
 //=========== Рисуем все узлы
-// Варианты
-//1проблема у андрея
-// неправильная логика обработки данных для рисовки
-// с самой рисовкой пизда
 function drawNetwork(network) {
-    console.log('drawNetwork');
+    // console.log('drawNetwork');
 
     let svg = d3.select("#svg");
     svg.select("g.core").remove();
@@ -1380,6 +1376,7 @@ function drawNetwork(network) {
 
 //    iter++;
 //    d3.select("#iter-number").text((iter / 1000).toFixed(3));
+    rePosBracket();
     
 }
 function getRelativeHeight(selection) {
@@ -1572,16 +1569,16 @@ function getLoss(network, dataPoints) {
 async function updateUI(firstStep, reqType = "") {
     
     if (reqType == "ResetInit") {
-        console.log('REQUEST');
+        // console.log('REQUEST');
         await requestMLP_RESET();
         await requestMLP_INIT();
     }
     else if (reqType == "Train") {
-        console.log('REQUEST');
+        // console.log('REQUEST');
         await requestMLP_TRAIN();
     }
     
-    console.log('After REQUEST');
+    // console.log('After REQUEST');
     if (firstStep === void 0) { firstStep = false; }
     updateWeightsUI(network, d3.select("g.core"));
     updateBiasesUI(network);
@@ -1776,7 +1773,59 @@ function generateData(firstTime) {
     finalNeuron.updatePoints(trainData);
     finalNeuron.updateTestPoints(state.showTestData ? testData : []);
 }
+//---------------------------------------------Логика bracket
+let divUINumHiddenLayers = document.querySelector('.ui-numHiddenLayers')
+  , divBracket           = document.querySelector('.bracket')
+  , coords
+  , objNeurons
+  , nLayers;
 
+window.addEventListener('load',   rePosBracket);
+window.addEventListener('resize', rePosBracket);
+// divUINumHiddenLayers.addEventListener('click', rePosBracket);
+// divUINumHiddenLayers.addEventListener('click', function() {setTimeout(rePosBracket, 0)} );
+
+
+function rePosBracket() {
+  coords     = [];
+  objNeurons = [];
+  
+  let ret;
+  let netw = document.querySelector('#network');
+  for(let i = 0, len = netw.children.length; i < len; i++) {
+    if(netw.children[i].getAttribute('id') && netw.children[i].getAttribute('id').match(/canvas-\d/g)) {
+      objNeurons.push(netw.children[i]);
+    } else if(!objNeurons.length) {
+      ret = true;
+    }
+  }
+  if(ret) {
+    divBracket.style.display = 'none';
+    return;
+  } else { divBracket.style.display = 'block'; }
+  
+  nLayers = document.querySelector('#num-layers').innerHTML; 
+  console.log(nLayers);
+  
+  if(nLayers > 1) {
+    coords.push(objNeurons[objNeurons.length - 1].getBoundingClientRect()); // первый нейрон
+    coords.push(objNeurons[0].getBoundingClientRect()); // последний нейрон
+    coords.push(objNeurons[0].getBoundingClientRect().x - objNeurons[objNeurons.length - 1].getBoundingClientRect().x); // промежуток между слоями
+
+    divBracket.style.width = `${coords[2] + coords[0].width}px`;
+  } else if(nLayers == 1) {
+    divBracket.style.display = 'block';
+    coords.push(objNeurons[objNeurons.length - 1].getBoundingClientRect()); // последний нейрон
+
+    divBracket.style.width = `${coords[0].width}px`;
+  }
+
+  divBracket.style.top   = `${coords[0].y - 80 + window.scrollY}px`;
+  divBracket.style.left  = `${coords[0].x}px`;
+  if(this == divUINumHiddenLayers && !divBracket.style.transition) { divBracket.style.transition = '.5s'; }
+}
+
+//---------------------------------------------Логика старта неиросети
 let currentId_MLP = -1;
 let prevResponse = "";
 
@@ -1785,7 +1834,6 @@ makeGUI();               // OK
 generateData(true);      // OK
 reset();                 // OK
 hideControls();          // OK
-
 
 //---------------------------------------------Логика запросов. Работает.
 
@@ -1807,7 +1855,7 @@ async function requestMLP_INIT() {
 
     state.datasetName = buff_name;
     state.activation = buff_actv;
-    console.log('INIT');
+    // console.log('INIT');
 //    console.log('response  ',response.statusText.slice(2, -1));
     
 
@@ -1827,7 +1875,7 @@ async function requestMLP_TRAIN() {
 }
 async function requestMLP_RESET() {
     if (currentId_MLP == -1) return;
-    console.log('RESET');
+    // console.log('RESET');
     let reqBody = `{"id": ${currentId_MLP}}`;
 
     let response = await fetch("http://localhost:8080/reset", {

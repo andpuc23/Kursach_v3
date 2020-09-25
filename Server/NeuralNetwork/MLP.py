@@ -224,12 +224,14 @@ class Link:
 
 class MLP(NetworkInterface):
     def __init__(self, network_shape: tuple, activation: ActivationFunction, output_activation: ActivationFunction,
-                 learn_rate: float, regul_rate: float, regularization: RegularizationFunction, input_ids: list):
+                 learn_rate: float, regul_rate: float, regularization: RegularizationFunction, input_ids: list,
+                 batch_size: int):
         self.learn_rate = learn_rate
         self.regularization_rate = regul_rate
         self.shape = network_shape
         layers_num = len(network_shape)
         self.network = []
+        self.batch_size = batch_size
 
         self.inputs = input_ids
         for layer_idx in range(layers_num):
@@ -347,8 +349,9 @@ class MLP(NetworkInterface):
 
         return struct
 
-    def train(self, point: Point, learningRate: float = 0.03, regularizationRate: float = 0, ):
-        self.forward_propagation(self.construct_input(point.get_cartesian()))
+    def train(self, point: Point, learningRate: float = 0.03, regularizationRate: float = 0):
+        for _ in range(self.batch_size):
+            self.forward_propagation(self.construct_input(point.get_cartesian()))
         self.back_propagation(point.val, Errors.SQUARE)
         self.update_weights()
         self.number += 1

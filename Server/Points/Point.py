@@ -16,8 +16,8 @@ class Point:
             self.X = x
             self.Y = y
         else:
-            self.X = int(ro*cos(phi))
-            self.Y = int(ro*sin(phi))
+            self.X = ro*cos(phi)
+            self.Y = ro*sin(phi)
 
     def distance_to(self, other):
         if not hasattr(other, 'X'):

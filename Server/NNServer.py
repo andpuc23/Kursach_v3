@@ -105,9 +105,10 @@ class RequestHandler(BaseHTTPRequestHandler):
                 else:
                     regularization = Regularizations.L2
             input_ids = parameters[5]
+            batch = int(parameters[6])
             net = MLP.MLP(layer_sizes, activation,
                           Activations.LINEAR, learn_rate,
-                          regularization_rate, regularization, input_ids)
+                          regularization_rate, regularization, input_ids, batch)
             networks[__id] = net
             print('inited network')
             return __id
@@ -226,9 +227,9 @@ class RequestHandler(BaseHTTPRequestHandler):
                 new_net_id = self._init_network('mlp', [[len(inputs)] + self.parameters['networkShape'] + [1],
                                            self.parameters['activation'], self.parameters['learningRate'],
                                            self.parameters['regularizationRate'],
-                                           self.parameters['regularization'], inputs])
+                                           self.parameters['regularization'], inputs, self.parameters['batchSize']])
 
-            networks[new_net_id].train(generator.get_point())
+            networks[new_net_id].train(generator.get_point(networks[new_net_id].number % 2 == 0))
 
             if networks[new_net_id] is RBF:
                 self.send_results((networks[new_net_id].to_full_json() + '\n' + str(new_net_id)).encode('utf-8'))
@@ -254,7 +255,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 else:
                     self.send_error(500, 'wrong params', 'dataset name or params can\'t be parsed')
 
-            networks[net_id].train(generator.get_point())
+            networks[net_id].train(generator.get_point(networks[net_id].number % 2 == 0))
             self.send_results(networks[net_id].to_json().encode('utf-8'))
             # self.send_results(id)  # - если надо возвращать id, эта строчка тоже нужна
 

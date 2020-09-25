@@ -6,13 +6,13 @@ POINTS_SIZE = 6.0  # size of the points' field
 
 
 class Generator:
-    def get_point(self) -> float:
+    def get_point(self, first) -> float:
         pass
 
-    def get_batch(self, size):
+    def get_batch(self, first, size):
         res = []
         for i in range(size):
-            res.append(self.get_point())
+            res.append(self.get_point(first))
         return res
 
     def type(self):
@@ -22,18 +22,16 @@ class Generator:
 class SpiralsPoints(Generator):
     def __init__(self, coeff=2.0):
         self.coeff = coeff
-        self.generate_first = True
 
-    def get_point(self):
+    def get_point(self, first):
         k = random()*2.0*POINTS_SIZE
         ro = k * .75
         phi = ro * self.coeff
 
-        self.generate_first = not self.generate_first
-        if self.generate_first:
+        if first:
             return Point(ro=ro, phi=phi, val=1)
         else:
-            return Point(ro=ro, phi=phi, val=-1)
+            return Point(ro=ro, phi=phi+pi, val=-1)
 
     def type(self):
         return 'spiral'
@@ -48,14 +46,14 @@ class ClusterPoints(Generator):
         self.size = size
         self.generate_first = True
 
-    def get_point(self):
-        self.generate_first = not self.generate_first
-        if self.generate_first:
+    def get_point(self, first):
+
+        if first:
             x = self.center1[0] + random() * 2 * self.size - self.size
             y = self.center1[1] + random() * 2 * self.size - self.size
             point = Point(x=x, y=y, val=1)
             if point.distance_to(self.center1) > self.size:
-                return self.get_point()
+                return self.get_point(first)
             else:
                 return point
         else:
@@ -63,7 +61,7 @@ class ClusterPoints(Generator):
             y = self.center2[1] + random() * 2 * self.size - self.size
             point = Point(x=x, y=y, val=-1)
             if point.distance_to(self.center2) > self.size:
-                return self.get_point()
+                return self.get_point(first)
             else:
                 return point
 
@@ -74,11 +72,25 @@ class ClusterPoints(Generator):
 class XorPoints(Generator):
     def __init__(self, size=POINTS_SIZE):
         self.size = size
+        self.generate_first = False
 
-    def get_point(self):
-        x = random() * 2 * self.size - self.size
-        y = random() * 2 * self.size - self.size
-        return Point(1 if x*y > 0 else -1, x=x, y=y)
+    def get_point(self, first):
+        positive = random() > 0.5
+        if first:
+            x = random() * self.size
+            y = random() * self.size
+            if positive:
+                return Point(1, x=x, y=y)
+            else:
+                return Point(1, x=-x, y=-y)
+
+        else:
+            x = random() * -self.size
+            y = random() * self.size
+            if positive:
+                return Point(-1, x=x, y=y)
+            else:
+                return Point(-1, x=x, y=-y)
 
     def type(self):
         return 'XOR'
@@ -90,15 +102,17 @@ class CirclePoints(Generator):
         self.circle_radius = circle_radius
         self.inner_radius = ring_inner
         self.outer_radius = ring_outer
+        self.generate_first = True
 
-    def get_point(self):
-        ro = random_sample() * self.outer_radius
-        while self.circle_radius < ro < self.inner_radius:
-            ro = random_sample() * self.outer_radius
+    def get_point(self, first):
+        if first:
+            ro = random() * (self.outer_radius - self.inner_radius) + self.inner_radius
+        else:
+            ro = random() * self.circle_radius
 
         phi = random_sample() * pi*2
 
-        if ro < self.circle_radius:
+        if ro <= self.circle_radius:
             return Point(ro=ro, phi=phi, val=1)
         else:
             return Point(ro=ro, phi=phi, val=-1)
