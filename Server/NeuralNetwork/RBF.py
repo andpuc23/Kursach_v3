@@ -1,5 +1,5 @@
 from math import exp, sqrt
-import json
+
 from NeuralNetwork.NetworkInterface import NetworkInterface
 from Points import *
 
@@ -8,8 +8,7 @@ class Neuron:
     def __init__(self,
                  id_: str,
                  sigma: float,
-                 x: float,
-                 y: float
+                 x, y
                  ):
         self.id = id_
         self.sigma = sigma
@@ -31,20 +30,10 @@ class Neuron:
     def output_for(self, p: Point):
         return self.error(p) / self.sigma
 
-    def to_json(self):
-        class Encoder(json.JSONEncoder):
-            def encode(self, obj: Neuron) -> str:
-                res = "{"
-                res += "\"id\": " + str(obj.id) + ", \"weight\": " + str(obj.weight) +\
-                    ", \"wX\": " + str(obj.wX) + ", \"wY\": " + str(obj.wY)
-                return (res + "}").lower()
-
-        return Encoder().encode(self)
-
 
 class RBF(NetworkInterface):
-    def __str__(self) -> str:
-        structure = 'RBF\n{}'.format(self.neuron_sigma)
+    def to_string(self) -> str:
+        structure = 'rbf\n{}'.format(self.neuron_sigma)
         for neuron in self.hidden_neurons:
             structure += str(neuron) + '\n'
 
@@ -56,7 +45,6 @@ class RBF(NetworkInterface):
                  neuron_sigma):
         self.neuron_sigma = neuron_sigma
         self.hidden_neurons = []
-        self.number = 0
 
     def add_neuron(self, point):
         neuron = Neuron(str(self.__curr_id), self.neuron_sigma, *point.get_cartesian())
@@ -66,20 +54,16 @@ class RBF(NetworkInterface):
         err = point.val - self.output_for_point(point)
 
         neuron.weight = err
-        self.number += 1
 
     def output_for_point(self, p: Point):
         sum_ = 0.
         for neuron in self.hidden_neurons:
-            sum_ += neuron.output_for(p) * neuron.weight
+            sum_ += neuron.error(p) * neuron.weight
         return sum_
 
-    def train(self, points):
-        if isinstance(points, list):
-            for point in points:
-                self.add_neuron(point)
-        else:
-            self.add_neuron(points)
+    def train(self, points: list):
+        for point in points:
+            self.add_neuron(point)
 
     def predict(self, point=None, points=None):
         if points is None:
@@ -90,26 +74,3 @@ class RBF(NetworkInterface):
                 res.append(self.output_for_point(point))
 
             return res
-
-    def to_full_json(self):
-        class Encoder(json.JSONEncoder):
-            def encode(self, net: RBF) -> str:
-                res = "{"
-                res += "\"sigma\": " + str(net.neuron_sigma)
-                res += ", \"nodes\": ["
-                for node in net.hidden_neurons:
-                    res += node.to_json() + ", "
-                res = res[:-2]
-                return (res + "]}").lower()
-
-        return Encoder().encode(self)
-
-    def to_json(self):
-        class Encoder(json.JSONEncoder):
-            def encode(self, net: RBF) -> str:
-                res = "{"
-                res += "\"last_node\": "
-                res += net.hidden_neurons[-1].to_json()
-                return (res + "}").lower()
-
-        return Encoder().encode(self)

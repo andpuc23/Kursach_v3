@@ -1,7 +1,6 @@
 from abc import abstractmethod, ABC
 import numpy as np
 from Points import PointsGenerator
-import json
 
 
 class NetworkInterface(ABC):
@@ -14,7 +13,7 @@ class NetworkInterface(ABC):
         pass
 
     @abstractmethod
-    def __str__(self) -> str: pass
+    def to_string(self) -> str: pass
 
     def results(self):
         sz = PointsGenerator.POINTS_SIZE
@@ -25,8 +24,5 @@ class NetworkInterface(ABC):
                                        PointsGenerator.Point
                                        (x=x, y=y, val=0)
                                        )
-        return field
 
-    @abstractmethod
-    def to_json(self):
-        pass
+        return field
